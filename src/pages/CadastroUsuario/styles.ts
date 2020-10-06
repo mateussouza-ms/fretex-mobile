@@ -74,6 +74,16 @@ const styles = StyleSheet.create({
         fontFamily: "Archivo_700Bold",
         fontSize: 16,
     },
+
+    textoValidacao: {
+        color: 'red',
+        fontSize: 13,
+    },
+
+    inputError: {
+        borderColor: 'red', 
+        borderWidth: 1,
+    }
 })
 
 export default styles;
