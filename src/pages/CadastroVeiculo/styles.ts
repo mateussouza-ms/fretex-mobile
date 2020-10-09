@@ -47,6 +47,10 @@ const styles = StyleSheet.create({
         borderRadius: 20
     },
 
+    buttonDisabled:{
+        opacity: 0.6,
+    },
+
     buttonText: {
         fontSize: 20,
         color: '#fff',
@@ -77,7 +81,17 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontFamily: "Archivo_700Bold",
         fontSize: 16,
-    }
+    },
+
+    textoValidacao: {
+        color: 'red',
+        fontSize: 13,
+    },
+
+    inputError: {
+        borderColor: 'red', 
+        borderWidth: 1,
+    },
 
 })
 

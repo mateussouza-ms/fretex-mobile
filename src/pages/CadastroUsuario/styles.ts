@@ -41,8 +41,14 @@ const styles = StyleSheet.create({
         margin: 15,
         backgroundColor: '#005ca3',
         padding: 10,
-        borderRadius: 20
+        borderRadius: 20,
+        
     },
+
+    buttonDisabled:{
+        opacity: 0.6,
+    },
+    
 
     buttonText: {
         fontSize: 20,

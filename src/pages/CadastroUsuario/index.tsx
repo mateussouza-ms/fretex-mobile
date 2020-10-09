@@ -1,43 +1,68 @@
-import React, { useEffect, useState } from 'react';
-import { View, ScrollView, Text, TextInput, Button, Alert, ActivityIndicator } from 'react-native';
+import React, { useState } from 'react';
+import { View, ScrollView, Text, TextInput, Button, Alert } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 
 import { Overlay } from 'react-native-elements';
 
-import { withFormik, FormikErrors } from 'formik';
-import * as Yup from 'yup';
-
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 import PageHeader from '../../components/PageHeader';
+
+import { max, obrigatorio, isEmail, min } from '../../valiadacao/validators';
 
 import api from '../../services/api';
 
 import styles from './styles';
 
-const CadastroUsuario = (props: any) => {
+function CadastroUsuario() {
     const { navigate } = useNavigation();
     const [nome, setNome] = useState('');
     const [email, setEmail] = useState('');
-    const [cpf, setCpf] = useState('');
+    const [cnp, setCnp] = useState('');
     const [telefoneDdd, setTelefoneDdd] = useState('');
     const [telefoneNumero, setTelefoneNumero] = useState('');
     const [senha, setSenha] = useState('');
+
     const [erroApi, setErroApi] = useState('');
-    const [visible, setVisible] = useState(true);
+    const [visible, setVisible] = useState(false);
+    const [formSubmetido, setFormSubmetido] = useState(false);
+
+
+    const errors = {
+        nome: obrigatorio(nome) || max(nome, 120),
+        cnp: obrigatorio(cnp) || min(cnp, 11) || max(cnp, 14),
+        email: obrigatorio(email) || isEmail(email),
+        telefoneDdd: obrigatorio(telefoneDdd) || min(telefoneDdd, 2) || max(telefoneDdd, 2),
+        telefoneNumero: obrigatorio(telefoneNumero) || min(telefoneNumero, 8) || max(telefoneNumero, 9),
+        senha: obrigatorio(senha) || max(senha, 120),
+    };
+
+    const formPreenchido = (nome != '' && cnp != '' && email != '' && telefoneDdd != '' && telefoneNumero != '' && senha != '');
+    const formValido = (!errors.nome && !errors.cnp && !errors.email && !errors.telefoneDdd && !errors.telefoneNumero && !errors.senha);
+
+
+    const toggleOverlay = () => {
+        setVisible(!visible);
+    };
 
     async function handleSubmit() {
 
+        setFormSubmetido(true);
+
+        if (!formValido) {
+            return;
+        }
+
         let tipoPessoa = 'FÍSICA';
 
-        if (cpf.length > 11) {
+        if (cnp.length > 11) {
             tipoPessoa = 'JURÍDICA';
         }
 
         await api
             .post('usuarios', {
                 "nome": nome,
-                "cnp": cpf,
+                "cnp": cnp,
                 "tipoPessoa": tipoPessoa,
                 "email": email,
                 "telefone": {
@@ -48,37 +73,14 @@ const CadastroUsuario = (props: any) => {
             })
             .then(response => {
                 console.log(response.data);
-                //let { id } = response.data;
-                //navigate('SelecaoPerfil', { usuarioId: id, usuarioNome: nome });
-            })
-            .catch(error => {
+                let { id } = response.data;
+                navigate('SelecaoPerfil', { usuarioId: id, usuarioNome: nome });
+            }).catch(error => {
                 setErroApi(JSON.stringify(error.response.data));
                 toggleOverlay();
             });
     }
 
-    const toggleOverlay = () => {
-        console.log("toggleOverlay");
-        console.log("props.status: " + props.status);
-        props.setStatus(null);
-        console.log("props.status: " + props.status);
-    };
-
-    function alerta() {
-        Alert.alert(
-            "Alert Title",
-            "My Alert Msg",
-            [
-                {
-                    text: "Cancel",
-                    onPress: () => console.log("Cancel Pressed"),
-                    style: "cancel"
-                },
-                { text: "OK", onPress: () => console.log("OK Pressed") }
-            ],
-            { cancelable: false },
-        );
-    }
 
 
     return (
@@ -87,78 +89,74 @@ const CadastroUsuario = (props: any) => {
 
             <ScrollView style={styles.scrollCampos}>
 
-                {props.isSubmitting && <ActivityIndicator />}
-
                 <Text style={styles.label}>Nome completo:
-                {props.touched.email
-                        && props.errors.nome
-                        && <Text style={styles.textoValidacao}>{`\b${props.errors.nome}`}</Text>}
+                {formSubmetido
+                        && errors.nome
+                        && <Text style={styles.textoValidacao}>{`\b${errors.nome}`}</Text>}
                 </Text>
                 <TextInput
                     style={
                         [
                             styles.input,
-                            props.touched.nome && props.errors.nome && styles.inputError
+                            formSubmetido && errors.nome ? styles.inputError : null
                         ]
                     }
-                    value={props.values.nome}
-                    onChangeText={(text) => props.setFieldValue('nome', text)}
+                    value={nome}
+                    onChangeText={(nome) => setNome(nome)}
                     placeholder="Nome"
                     maxLength={120}
                 />
 
 
                 <Text style={styles.label}>CPF/CNPJ:
-                {props.touched.cnp
-                        && props.errors.cnp
-                        && <Text style={styles.textoValidacao}>{`\b${props.errors.cnp}`}</Text>}
+               {formSubmetido
+                        && errors.cnp
+                        && <Text style={styles.textoValidacao}>{`\b${errors.cnp}`}</Text>}
                 </Text>
                 <TextInput
                     style={
                         [
                             styles.input,
-                            props.touched.cnp && props.errors.cnp && styles.inputError
+                            formSubmetido && errors.cnp ? styles.inputError : null
                         ]
                     }
-                    value={props.values.cnp}
-                    onChangeText={(text) => props.setFieldValue('cnp', text)}
+                    value={cnp}
+                    onChangeText={(cnp) => setCnp(cnp)}
                     placeholder="CPF/CNPJ"
                     keyboardType="numeric"
                     maxLength={14}
                 />
 
-                <Text style={styles.label}>E - mail:
-                {props.touched.email
-                        && props.errors.email
-                        && <Text style={styles.textoValidacao}>{`\b${props.errors.email}`}</Text>}
+                <Text style={styles.label}>E-mail:
+               {formSubmetido
+                        && errors.email
+                        && <Text style={styles.textoValidacao}>{`\b${errors.email}`}</Text>}
                 </Text>
                 <TextInput
                     style={
                         [
                             styles.input,
-                            props.touched.email && props.errors.email && styles.inputError
+                            formSubmetido && errors.email ? styles.inputError : null
                         ]
                     }
-                    value={props.values.email}
-                    onChangeText={(text) => props.setFieldValue('email', text)}
+                    value={email}
+                    onChangeText={(email) => setEmail(email)}
                     placeholder="E-mail"
                     keyboardType="email-address"
                 />
 
-
                 <Text style={styles.label}>Telefone:
-                    {props.touched.telefone?.ddd
-                        && props.errors.telefone?.ddd
-                        && <Text style={styles.textoValidacao}>{` DDD ${props.errors.telefone?.ddd}`}</Text>}
-                    {props.touched.telefone?.ddd
-                        && props.errors.telefone?.ddd
-                        && props.touched.telefone?.numero
-                        && props.errors.telefone?.numero
+               {formSubmetido
+                        && errors.telefoneDdd
+                        && <Text style={styles.textoValidacao}>{` DDD ${errors.telefoneDdd}`}</Text>}
+                    {formSubmetido
+                        && errors.telefoneDdd
+                        && errors.telefoneNumero
                         && <Text style={styles.textoValidacao}>{' |'}</Text>}
 
-                    {props.touched.telefone?.numero
-                        && props.errors.telefone?.numero
-                        && <Text style={styles.textoValidacao}>{` Número ${props.errors.telefone?.numero}`}</Text>}
+                    {formSubmetido
+                        && errors.telefoneNumero
+                        && <Text style={styles.textoValidacao}>{` Número ${errors.telefoneNumero}`}</Text>}
                 </Text>
                 <View style={styles.inputGroup}>
                     <View style={styles.inputDdd}>
@@ -166,11 +164,11 @@ const CadastroUsuario = (props: any) => {
                             style={
                                 [
                                     styles.input,
-                                    props.touched.telefone?.ddd && props.errors.telefone?.ddd && styles.inputError
+                                    formSubmetido && errors.telefoneDdd ? styles.inputError : null
                                 ]
                             }
-                            value={props.values.telefone.ddd}
-                            onChangeText={(text) => props.setFieldValue('telefone.ddd', text)}
+                            value={telefoneDdd}
+                            onChangeText={(telefoneDdd) => setTelefoneDdd(telefoneDdd)}
                             placeholder="DDD"
                             keyboardType="numeric"
                             maxLength={2}
@@ -181,11 +179,11 @@ const CadastroUsuario = (props: any) => {
                             style={
                                 [
                                     styles.input,
-                                    props.touched.telefone?.numero && props.errors.telefone?.numero && styles.inputError
+                                    formSubmetido && errors.telefoneNumero ? styles.inputError : null
                                 ]
                             }
-                            value={props.values.telefone.numero}
-                            onChangeText={(text) => props.setFieldValue('telefone.numero', text)}
+                            value={telefoneNumero}
+                            onChangeText={(telefoneNumero) => setTelefoneNumero(telefoneNumero)}
                             placeholder="Número"
                             keyboardType="numeric"
                             maxLength={9}
@@ -194,103 +192,42 @@ const CadastroUsuario = (props: any) => {
                 </View>
 
                 <Text style={styles.label}>Senha:
-                {props.touched.senha
-                        && props.errors.senha
-                        && <Text style={styles.textoValidacao}>{`\b${props.errors.senha}`}</Text>}
+               {formSubmetido
+                        && errors.senha
+                        && <Text style={styles.textoValidacao}>{`\b${errors.senha}`}</Text>}
                 </Text>
                 <TextInput
                     style={
                         [
                             styles.input,
-                            props.touched.senha && props.errors.senha && styles.inputError
+                            formSubmetido && errors.senha ? styles.inputError : null
                         ]
                     }
-                    value={props.values.senha}
-                    onChangeText={(text) => props.setFieldValue('senha', text)}
+                    value={senha}
+                    onChangeText={(senha) => setSenha(senha)}
                     placeholder="Senha"
                     secureTextEntry={true}
                     maxLength={120}
                 />
-                <RectButton style={styles.button} onPress={props.handleSubmit}>
+                <RectButton
+                    enabled={formPreenchido}
+                    style={[styles.button, !formPreenchido ? styles.buttonDisabled : null]}
+                    onPress={handleSubmit}
+                >
                     <Text style={styles.buttonText}>Salvar</Text>
                 </RectButton>
 
-                <Button title="Open Overlay" onPress={toggleOverlay} />
-
-
-                <Overlay overlayStyle={{ width: "90%" }} isVisible={!!props.status} onBackdropPress={toggleOverlay}>
+                <Overlay overlayStyle={{ width: "90%" }} isVisible={visible} onBackdropPress={toggleOverlay}>
                     <Text style={{ lineHeight: 20 }}>
                         <Text style={{ fontWeight: "bold", fontSize: 17 }}>{`Erro ao consumir API: \n`}</Text>
-
-
+                        <Text>{erroApi}</Text>
                     </Text>
                 </Overlay>
+
             </ScrollView>
-
-
         </View>
     );
 
 }
 
-export default withFormik({
-    mapPropsToValues: () => ({
-        nome: '',
-        cnp: '',
-        email: '',
-        telefone: { ddd: '', numero: '' },
-        senha: '',
-        tipoPessoa: '',
-    }),
-
-    validationSchema: Yup.object().shape({
-        nome: Yup.string()
-            .max(120, 'O nome deve ter no máximo 120 caracteres')
-            .required('Obrigatório'),
-        cnp: Yup.string()
-            .min(11, 'O CPF/CNPJ deve ter no mínimo 11 caracteres')
-            .max(120, 'O CPF/CNPJ deve ter no máximo 14 caracteres')
-            .required('Obrigatório'),
-        email: Yup.string()
-            .email('Digite um e-mail válido')
-            .required('Obrigatório'),
-        telefone: Yup.object().shape({
-            ddd: Yup.string()
-                .min(2, 'deve ter no mínimo 2 caracteres')
-                .max(2, 'deve ter no máximo 2 caracteres')
-                .required('obrigatório'),
-            numero: Yup.string()
-                .min(8, 'deve ter no mínimo 8 caracteres')
-                .max(9, 'deve ter no máximo 9 caracteres')
-                .required('obrigatório'),
-        }),
-        senha: Yup.string()
-            .max(9, 'A senha deve ter no máximo 120 caracteres')
-            .required('Obrigatório'),
-    }),
-
-    handleSubmit: async (values, { setSubmitting, setFieldError, setStatus }) => {
-
-        values.tipoPessoa = 'FÍSICA';
-
-        if (values.cnp.length > 11) {
-            values.tipoPessoa = 'JURÍDICA';
-        }
-
-        console.log(values);
-
-        await api.post('usuarios', values)
-            .then(response => {
-                console.log(response.data);
-                //let { id } = response.data;
-                //navigate('SelecaoPerfil', { usuarioId: id, usuarioNome: nome });
-
-            })
-            .catch(error => {
-                console.log(JSON.stringify(error));
-                setSubmitting(false);
-                setFieldError('erroapi', JSON.stringify(error));
-                setStatus({ visible: true })
-            });
-    }
-})(CadastroUsuario);
+export default CadastroUsuario;
