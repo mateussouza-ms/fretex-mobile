@@ -33,7 +33,8 @@ function Login() {
     }
 
     function handleNavigateToRecuperarSenhaPage() {
-        navigate('SelecaoPerfil', {usuarioId: 9, usuarioNome: "mateus"});
+        //navigate('SelecaoPerfil', {usuarioId: 9, usuarioNome: "mateus"});
+        navigate('Inicial');
     }
 
 

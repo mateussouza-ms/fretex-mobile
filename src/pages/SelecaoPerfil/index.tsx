@@ -13,15 +13,12 @@ import styles from './styles';
 
 import iconeCaminhao from '../../assets/images/icons/caminhao.png';
 import iconeCliente from '../../assets/images/icons/cliente.png';
-import { Overlay } from 'react-native-elements';
 
 
 
 function SelecaoPerfil({ route, navigation }: any) {
 
     const { usuarioId, usuarioNome } = route.params;
-    const [erroApi, setErroApi] = useState('');
-    const [visible, setVisible] = useState(false);
 
     let primeiroNome = usuarioNome.split(' ')[0]
 
@@ -32,20 +29,9 @@ function SelecaoPerfil({ route, navigation }: any) {
         navigate("CadastroVeiculo", { usuarioId, novoPrestador: true })
     }
 
-    const toggleOverlay = () => {
-        setVisible(!visible);
-    };
 
     async function cadastrarCliente() {
-        const response = await api.post(`usuarios/${usuarioId}/perfil/cliente`)
-            .then(response => {
-                console.log(response.data);
-                let { id } = response.data;
-                //navigate('SelecaoPerfil', { usuarioId: id, usuarioNome: nome });
-            }).catch(error => {
-                setErroApi(JSON.stringify(error.response.data));
-                toggleOverlay();
-            });
+        const response = await api.post(`usuarios/${usuarioId}/perfil/cliente`);
     }
 
     return (
@@ -77,13 +63,6 @@ function SelecaoPerfil({ route, navigation }: any) {
                         <Text style={styles.buttonText}>Prestador de serviços</Text>
                     </RectButton>
                 </View>
-
-                <Overlay overlayStyle={{ width: "90%" }} isVisible={visible} onBackdropPress={toggleOverlay}>
-                    <Text style={{ lineHeight: 20 }}>
-                        <Text style={{ fontWeight: "bold", fontSize: 17 }}>{`Erro ao consumir API: \n`}</Text>
-                        <Text>{erroApi}</Text>
-                    </Text>
-                </Overlay>
             </View>
         </View>
     );
