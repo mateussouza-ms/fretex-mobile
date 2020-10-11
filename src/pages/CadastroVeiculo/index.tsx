@@ -130,7 +130,7 @@ function CadastroVeiculo({ route, navigation }: any) {
                     style={
                         [
                             styles.input,
-                            formSubmetido && errors.nome ? styles.inputError : null
+                            formSubmetido && errors.pesoMaximo ? styles.inputError : null
                         ]
                     }
                     value={pesoMaximo}

@@ -9,6 +9,9 @@ import CadastroUsuario from '../pages/CadastroUsuario'
 import SelecaoPerfil from '../pages/SelecaoPerfil';
 import CadastroVeiculo from '../pages/CadastroVeiculo';
 import Login from '../pages/Login';
+import Inicial from '../pages/Inicial';
+import OfertaCarga from '../pages/SolicitacaoFrete';
+import SolicitacaoFrete from '../pages/SolicitacaoFrete';
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -40,6 +43,8 @@ function AppStack() {
                         }
                     }
                 />
+                <Screen name="Inicial" component={Inicial} />
+                <Screen name="SolicitacaoFrete" component={SolicitacaoFrete} />
             </Navigator>
         </NavigationContainer>
     );
