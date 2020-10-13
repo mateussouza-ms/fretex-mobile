@@ -31,7 +31,7 @@ function Inicial() {
                     </RectButton>
 
                     <RectButton
-                        onPress={() => {}}
+                        onPress={() => {navigate('ListaSolicitacoes')}}
                         style={styles.button}>
                         <Image source={iconeListaNegociacoes} />
 

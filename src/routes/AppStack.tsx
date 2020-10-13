@@ -2,16 +2,13 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack';
 
-import Landing from '../pages/Landing';
-import GiveClasses from '../pages/GiveClasses';
-import StudyTabs from './StudyTabs';
 import CadastroUsuario from '../pages/CadastroUsuario'
 import SelecaoPerfil from '../pages/SelecaoPerfil';
 import CadastroVeiculo from '../pages/CadastroVeiculo';
 import Login from '../pages/Login';
 import Inicial from '../pages/Inicial';
-import OfertaCarga from '../pages/SolicitacaoFrete';
 import SolicitacaoFrete from '../pages/SolicitacaoFrete';
+import ListaSolicitacoes from '../pages/ListaSolicitacoes';
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -45,6 +42,7 @@ function AppStack() {
                 />
                 <Screen name="Inicial" component={Inicial} />
                 <Screen name="SolicitacaoFrete" component={SolicitacaoFrete} />
+                <Screen name="ListaSolicitacoes" component={ListaSolicitacoes} />
             </Navigator>
         </NavigationContainer>
     );
