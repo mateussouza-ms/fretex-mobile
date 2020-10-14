@@ -6,12 +6,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
 
-    title: {
-        textAlign: 'center',
-        marginTop: 200,
-        fontSize: 40,
-        color: '#FA9435'
-    },
 
     inputGroup: {
         flexDirection: "row",
@@ -22,6 +16,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#e6e6fa',
         borderRadius: 10,
         margin: 10,
+        marginTop: 5,
         padding: 10,
         color: '#000',
         fontSize: 20
@@ -60,10 +55,13 @@ const styles = StyleSheet.create({
     label: {
         marginLeft: 10,
         fontSize: 15,
+        color: '#000',
+        fontFamily: 'Poppins_400Regular',
+        marginTop: 15,
     },
 
     scrollCampos: {
-        paddingTop: 50
+        paddingTop: 30
     },
 
     submitButton: {

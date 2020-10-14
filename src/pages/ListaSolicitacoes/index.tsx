@@ -10,8 +10,11 @@ import api from '../../services/api';
 import styles from './styles';
 import { Icon, ListItem } from 'react-native-elements';
 import { Picker } from '@react-native-community/picker';
+import { useNavigation } from '@react-navigation/native';
 
 function ListaSolicitacoes() {
+    const { navigate } = useNavigation();
+
     const [cargas, setCargas] = useState([
         {
             id: '',
@@ -60,8 +63,7 @@ function ListaSolicitacoes() {
     const [filtroSituacao, setSituacaoFiltro] = useState('');
 
     useEffect(() => {
-        handleFilterSubmit('cadastradas')
-
+        handleFilterSubmit('cadastradas');
     }, []);
 
 
@@ -107,7 +109,14 @@ function ListaSolicitacoes() {
 
                 <View style={styles.list}>
                     {cargas.map((carga) => (
-                        <ListItem key={carga.id} onPress={() => { }} bottomDivider>
+                        <ListItem 
+                            key={carga.id}
+                            onPress={() => {                                
+                                navigate('DetalhesSolicitacao', carga);
+                            }}
+                            containerStyle={styles.listItem}
+                            bottomDivider
+                        >
                             <ListItem.Content>
                                 <ListItem.Title>{carga.tipoCarga + ' (' + carga.peso + ' kg)'}</ListItem.Title>
                                 <ListItem.Subtitle>
@@ -122,7 +131,7 @@ function ListaSolicitacoes() {
                                     }
                                 </ListItem.Subtitle>
                             </ListItem.Content>
-                            <ListItem.Chevron color='grey' />
+                            <ListItem.Chevron color='#000000' />
                         </ListItem>
                     ))}
                 </View>

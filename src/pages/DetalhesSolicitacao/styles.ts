@@ -6,6 +6,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
 
+    detalhes: {
+        margin: 10,
+    },
+
     scrollView: {
         //padding: 5,
     },
@@ -23,19 +27,30 @@ const styles = StyleSheet.create({
     },
 
     label: {
+        fontSize: 15, 
+        color: '#000',
+        fontFamily: 'Poppins_600SemiBold',
+        margin: 3,
+        backgroundColor: '#e6eff49e',
+        borderRadius: 7,
+        padding: 2,
+        paddingLeft: 5,
+    },
+
+    labelContent: {
+        fontFamily: 'Poppins_400Regular',
+        fontWeight: "normal",
+    },
+
+    labelList:{
+        backgroundColor: '#fff',
         marginLeft: 10,
-        fontSize: 16,
-        fontWeight: "bold",
     },
 
     filterGroup: {
         flexDirection: 'row',
         alignContent: 'space-between',
         alignItems: 'center',
-    },
-
-    listItem: {
-        backgroundColor: '#edededcf',
     },
 
 })

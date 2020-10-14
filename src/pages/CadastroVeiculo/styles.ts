@@ -62,6 +62,8 @@ const styles = StyleSheet.create({
         marginTop: 15,
         marginLeft: 10,
         fontSize: 15,
+        color: '#000',
+        fontFamily: 'Poppins_400Regular',
     },
 
     scrollCampos: {

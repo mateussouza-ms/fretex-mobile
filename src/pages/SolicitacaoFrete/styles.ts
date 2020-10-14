@@ -60,6 +60,8 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         marginTop: 15,
         fontSize: 15,
+        color: '#000',
+        fontFamily: 'Poppins_400Regular',
     },
 
     labelEnderecoContainer: {
