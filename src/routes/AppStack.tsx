@@ -11,6 +11,7 @@ import SolicitacaoFrete from '../pages/SolicitacaoFrete';
 import ListaSolicitacoes from '../pages/ListaSolicitacoes';
 import DetalhesSolicitacao from '../pages/DetalhesSolicitacao';
 import DetalhesNegociacao from '../pages/DetalhesNegociacao';
+import CadastroProposta from '../pages/CadastroProposta';
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -47,6 +48,7 @@ function AppStack() {
                 <Screen name="ListaSolicitacoes" component={ListaSolicitacoes} />
                 <Screen name="DetalhesSolicitacao" component={DetalhesSolicitacao} />
                 <Screen name="DetalhesNegociacao" component={DetalhesNegociacao} />
+                <Screen name="CadastroProposta" component={CadastroProposta} />
             </Navigator>
         </NavigationContainer>
     );

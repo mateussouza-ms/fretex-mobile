@@ -8,12 +8,18 @@ import PageHeader from '../../components/PageHeader';
 import api from '../../services/api';
 
 import styles from './styles';
-import { Icon, ListItem } from 'react-native-elements';
+import { Icon, ListItem, Overlay } from 'react-native-elements';
 import { Picker } from '@react-native-community/picker';
 import { format } from 'date-fns';
+import { useNavigation } from '@react-navigation/native';
+import CadastroProposta from '../CadastroProposta';
 
 function DetalhesNegociacao({ route, navigation }: any) {
+    const { navigate } = useNavigation();
     const [tipoCarga, setTipoCarga] = useState('');
+
+    const [erroApi, setErroApi] = useState('');
+    const [visible, setVisible] = useState(false);
 
     const [negociacao, setNegociacao] = useState(
         {
@@ -33,7 +39,7 @@ function DetalhesNegociacao({ route, navigation }: any) {
                     id: '',
                     valor: 0.00,
                     justificativa: '',
-                    aceita: '',
+                    aceita: false,
                     usuarioResponsavel: {
                         id: '',
                         nome: '',
@@ -49,6 +55,29 @@ function DetalhesNegociacao({ route, navigation }: any) {
         setNegociacao(negociacao);
         setTipoCarga(tipoCarga);
     }, []);
+
+    function aceitarProposta(propostaId: string) {
+        api.patch(
+            `cargas/${negociacao.cargaId}/negociacoes/${negociacao.id}/propostas/${propostaId}`,
+            {
+                "aceita": true,
+                "usuarioId": 1
+            }
+        ).then(response => {
+            console.log(JSON.stringify(response.data));
+        }).catch(error => {
+            setErroApi(JSON.stringify(error.response.data));
+            toggleOverlay();
+        });
+    }
+
+    function contrapropor(){
+        navigate('CadastroProposta', {cargaId: negociacao.cargaId, negociacaoId: negociacao.id, novaNegociacao: false})
+    }
+
+    const toggleOverlay = () => {
+        setVisible(!visible);
+    };
 
     return (
         <View style={styles.container}>
@@ -78,8 +107,7 @@ function DetalhesNegociacao({ route, navigation }: any) {
                 <View style={styles.list}>
                     {negociacao.propostas.map((proposta) => (
                         <ListItem
-                            key={proposta.id}
-                            onPress={() => { }}
+                            key={proposta.id}                           
                             bottomDivider
                             containerStyle={styles.listItem}
                         >
@@ -100,10 +128,14 @@ function DetalhesNegociacao({ route, navigation }: any) {
                                     buttons={[
                                         'Aceitar', 'Contrapropor'
                                     ]}
-                                    onPress={(botao) => { console.log(botao) }}
+                                    onPress={(botaoIndex) => { 
+                                       botaoIndex == 0 ? aceitarProposta(proposta.id) : contrapropor()
+                                    }}
                                     containerStyle={styles.listButtonsContainer}
                                     buttonStyle={styles.buttonList}
                                     textStyle={styles.buttonListText}
+                                    disabled= {proposta.aceita != null || proposta.usuarioResponsavel.id == '1'}
+                                    disabledStyle={styles.buttonList}
                                 >
 
                                 </ListItem.ButtonGroup>
@@ -112,6 +144,12 @@ function DetalhesNegociacao({ route, navigation }: any) {
                         </ListItem>
                     ))}
                 </View>
+                <Overlay overlayStyle={{ width: "90%" }} isVisible={visible} onBackdropPress={toggleOverlay}>
+                    <Text style={{ lineHeight: 20 }}>
+                        <Text style={{ fontWeight: "bold", fontSize: 17 }}>{`Erro ao consumir API: \n`}</Text>
+                        <Text>{erroApi}</Text>
+                    </Text>
+                </Overlay>
             </ScrollView>
         </View>
 
