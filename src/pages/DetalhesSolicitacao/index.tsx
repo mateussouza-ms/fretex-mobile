@@ -11,8 +11,10 @@ import styles from './styles';
 import { Icon, ListItem } from 'react-native-elements';
 import { Picker } from '@react-native-community/picker';
 import { format } from 'date-fns';
+import { useNavigation } from '@react-navigation/native';
 
 function DetalhesSolicitacao({ route, navigation }: any) {
+    const { navigate } = useNavigation();
 
     const [carga, setCarga] = useState(
         {
@@ -73,7 +75,10 @@ function DetalhesSolicitacao({ route, navigation }: any) {
                             valor: '',
                             justificativa: '',
                             aceita: '',
-                            usuarioResponsavelId: '',
+                            usuarioResponsavel: {
+                                id: '',
+                                nome: '',
+                              },
                             dataCriacao: ''
                         }
                     ]
@@ -111,7 +116,7 @@ function DetalhesSolicitacao({ route, navigation }: any) {
 
                     <Text style={styles.label}>Endereço de partida:
                     <Text style={[styles.label, styles.labelContent]}>
-                            {' '
+                            {carga.enderecoRetirada &&' '
                                 + carga.enderecoRetirada.logradouro + ', '
                                 + carga.enderecoRetirada.numero + ', '
                                 + carga.enderecoRetirada.complemento + ', '
@@ -161,7 +166,13 @@ function DetalhesSolicitacao({ route, navigation }: any) {
             <Text style={[ styles.label, styles.labelList]}>Negociações: </Text>
                 <View style={styles.list}>
                     {carga.negociacoes.map((negociacao) => (
-                        <ListItem key={negociacao.id} onPress={() => { }} bottomDivider>
+                        <ListItem 
+                            key={negociacao.id} 
+                            onPress={() => {                                
+                                navigate('DetalhesNegociacao', [negociacao, carga.tipoCarga]);
+                            }}
+                            bottomDivider
+                        >
                             <ListItem.Content>
                                 <ListItem.Title>{negociacao.status}</ListItem.Title>
                                 <ListItem.Subtitle>
