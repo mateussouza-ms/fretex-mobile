@@ -11,12 +11,15 @@ import api from '../../services/api';
 import { max, obrigatorio, isEmail, min } from '../../valiadacao/validators';
 
 import styles from './styles';
+import Loader from '../../components/Loader';
 
 function CadastroProposta({ route, navigation }: any) {
 
-
-    const { cargaId, negociacaoId, novaNegociacao } = route.params;
+    const { cargaId, negociacaoId, novaNegociacao, usuarioLogado, veiculoId } = route.params;
     const { navigate } = useNavigation();
+
+    const [loading, setLoading] = useState(false);
+
     const [valor, setValor] = useState('');
     const [justificativa, setJustificativa] = useState('');
     const [usuarioResponsavel, setUsuarioResponsavel] = useState({ id: '' });
@@ -56,46 +59,50 @@ function CadastroProposta({ route, navigation }: any) {
     }
 
     async function abrirNegociacao() {
+        setLoading(true);
         await api.post(
             `cargas/${cargaId}/negociacoes`,
             {
-                veiculoId: 0,
+                veiculoId: veiculoId,
                 proposta: {
                     valor,
                     justificativa,
                     usuarioResponsavel: {
-                        id: 1
+                        id: usuarioLogado.id
                     }
                 }
             }
         ).then(response => {
-            console.log(response.data);
-            let { id } = response.data;
-            //navigate('SelecaoPerfil', { cargaId: id, usuarioNome: nome });
+            let carga = response.data;
+            navigate('DetalhesCarga', { carga, usuarioLogado });
         }).catch(error => {
             setErroApi(JSON.stringify(error.response.data));
             toggleOverlay();
         });
+        setLoading(false);
     }
 
     async function adicionarContraproposta() {
-        const response = await api.post(
+        setLoading(true);
+        await api.post(
             `cargas/${cargaId}/negociacoes/${negociacaoId}/propostas`,
             {
                 valor,
                 justificativa,
                 usuarioResponsavel: {
-                    id: 1
+                    id: usuarioLogado.id,
                 }
             }
         ).then(response => {
-            console.log(response.data);
-            let { id } = response.data;
-            //navigate('SelecaoPerfil', { cargaId: id, usuarioNome: nome });
+            let negociacao = response.data;
+            console.log('negociacao: ' + JSON.stringify(negociacao));
+
+            navigate('DetalhesNegociacao', { negociacao, tipoCarga: negociacao.tipoCarga, usuarioLogado });
         }).catch(error => {
             setErroApi(JSON.stringify(error.response.data));
             toggleOverlay();
         });
+        setLoading(false);
     }
 
 
@@ -119,6 +126,7 @@ function CadastroProposta({ route, navigation }: any) {
                     value={valor}
                     onChangeText={(valor) => setValor(valor)}
                     placeholder="Valor do frete"
+                    keyboardType="numeric"
                 />
 
 
@@ -136,7 +144,7 @@ function CadastroProposta({ route, navigation }: any) {
                     }
                     value={justificativa}
                     onChangeText={(justificativa) => setJustificativa(justificativa)}
-                    placeholder="justificativa para o valor da proposta"
+                    placeholder="Justificativa para o valor"
                 />
 
 
@@ -148,14 +156,17 @@ function CadastroProposta({ route, navigation }: any) {
                     <Text style={styles.buttonText}>Salvar</Text>
                 </RectButton>
 
-                <Overlay overlayStyle={{ width: "90%" }} isVisible={visible} onBackdropPress={toggleOverlay}>
-                    <Text style={{ lineHeight: 20 }}>
-                        <Text style={{ fontWeight: "bold", fontSize: 17 }}>{`Erro ao consumir API: \n`}</Text>
-                        <Text>{erroApi}</Text>
-                    </Text>
-                </Overlay>
 
             </ScrollView>
+
+            <Loader loading={loading} />
+
+            <Overlay overlayStyle={{ width: "90%" }} isVisible={visible} onBackdropPress={toggleOverlay}>
+                <Text style={{ lineHeight: 20 }}>
+                    <Text style={{ fontWeight: "bold", fontSize: 17 }}>{`Erro ao consumir API: \n`}</Text>
+                    <Text>{erroApi}</Text>
+                </Text>
+            </Overlay>
         </View>
     );
 }

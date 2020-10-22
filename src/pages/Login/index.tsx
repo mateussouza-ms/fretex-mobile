@@ -30,18 +30,19 @@ function Login() {
 
     function handleNavigateToCadastroUsuarioPage() {
         navigate("CadastroUsuario");
+        //navigate('Inicial', { usuarioLogado: { id: 1, nome: '', perfil: 'CLIENTE' } });
     }
 
     function handleNavigateToRecuperarSenhaPage() {
-        //navigate('SelecaoPerfil', {usuarioId: 9, usuarioNome: "mateus"});
-        navigate('Inicial');
+        navigate('SelecaoPerfil', {usuarioId: 9, usuarioNome: "mateus"});
+        //navigate('Inicial', { usuarioLogado: { id: 2, nome: '', perfil: 'PRESTADOR_SERVICOS' } });
     }
 
 
     return (
         <View style={styles.container}>
 
-          
+
             <Image source={landingImg} style={styles.banner} />
 
             <Text style={styles.title}>Fazer login</Text>
@@ -66,7 +67,7 @@ function Login() {
 
             <CheckBox
                 containerStyle={styles.checkboxContainer}
-                textStyle={styles.checkboxText}            
+                textStyle={styles.checkboxText}
                 checkedColor='#fff'
                 title='Lembrar-me'
                 checked={checked}
@@ -84,6 +85,45 @@ function Login() {
                 <TouchableOpacity onPress={handleNavigateToRecuperarSenhaPage} >
                     <Text style={styles.textLink}>Esqueci minha senha</Text>
                 </TouchableOpacity>
+            </View>
+
+            <View style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                padding: 10,
+                marginHorizontal: -10,
+                marginTop: 15,
+                marginBottom: -15,
+                flex: 1,
+                backgroundColor: '#8ef9fb38',
+            }}>
+                <RectButton
+                    style={[
+                        styles.button,
+                        {
+                            width: '45%',
+                            margin: 5,
+                            backgroundColor: '#9871F5',
+                        }
+                    ]}
+                    onPress={() => navigate('Inicial', { usuarioLogado: { id: 1, nome: '', perfil: 'CLIENTE' } })}
+                >
+                    <Text style={styles.buttonText}>Cliente</Text>
+                </RectButton>
+
+                <RectButton
+                    style={[
+                        styles.button,
+                        {
+                            width: '45%',
+                            margin: 5,
+                            backgroundColor: '#04D361',
+                        }
+                    ]}
+                    onPress={() => navigate('Inicial', { usuarioLogado: { id: 2, nome: '', perfil: 'PRESTADOR_SERVICOS' } })}
+                >
+                    <Text style={styles.buttonText}>Prestador</Text>
+                </RectButton>
             </View>
 
         </View>

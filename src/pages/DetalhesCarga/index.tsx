@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { View, ScrollView, Text, TextInput, FlatList } from 'react-native';
-import { BorderlessButton, RectButton } from 'react-native-gesture-handler';
+import React, { useEffect, useState, version } from 'react';
+import { View, ScrollView, Text, TextInput, FlatList, RefreshControl } from 'react-native';
+import { BorderlessButton, RectButton, TouchableOpacity } from 'react-native-gesture-handler';
 import { Feather } from '@expo/vector-icons';
 
 import PageHeader from '../../components/PageHeader';
@@ -8,13 +8,27 @@ import PageHeader from '../../components/PageHeader';
 import api from '../../services/api';
 
 import styles from './styles';
-import { Icon, ListItem } from 'react-native-elements';
+import { Icon, ListItem, Overlay } from 'react-native-elements';
 import { Picker } from '@react-native-community/picker';
 import { format } from 'date-fns';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import Loader from '../../components/Loader';
 
-function DetalhesSolicitacao({ route, navigation }: any) {
+interface Veiculo {
+    id: number,
+    prestadorServicoId: number,
+    nome: string,
+    pesoMaximo: number,
+    outrasCaracteristicas: string,
+}
+
+function DetalhesCarga({ route, navigation }: any) {
     const { navigate } = useNavigation();
+    const [loading, setLoading] = useState(false);
+
+    const { usuarioLogado } = route.params;
+    const [veiculos, setVeiculos] = useState([]);
+    const [veiculo, setVeiculo] = useState<Veiculo>();
 
     const [carga, setCarga] = useState(
         {
@@ -78,7 +92,7 @@ function DetalhesSolicitacao({ route, navigation }: any) {
                             usuarioResponsavel: {
                                 id: '',
                                 nome: '',
-                              },
+                            },
                             dataCriacao: ''
                         }
                     ]
@@ -88,13 +102,65 @@ function DetalhesSolicitacao({ route, navigation }: any) {
     );
 
     useEffect(() => {
-        setCarga(route.params);
+        setLoading(true);
+        const { carga } = route.params;
+        setCarga(carga);
+
+        if (usuarioLogado.perfil == 'PRESTADOR_SERVICOS' && veiculos.length == 0) {
+            api.get(`usuarios/${usuarioLogado.id}/perfil/prestador-servico`)
+                .then(response => {
+                    const { veiculos } = response.data;
+                    setVeiculos(veiculos);
+                    if (veiculos.length == 1) {
+                        setVeiculo(veiculos[0]);
+                    }
+                });
+        }
+        setLoading(false);
     }, []);
+
+    useFocusEffect(() => {
+        const { carga } = route.params;
+        setCarga(carga);
+    });
+
+    function handleChangeValueVeiculo(value: Veiculo) {
+        if (value.id) {
+            setVeiculo(value);
+        }
+    }
+
+    const [erroApi, setErroApi] = useState('');
+    const [visible, setVisible] = useState(false);
+    const [refreshing, setRefreshing] = useState(false);
+
+    const toggleOverlay = () => {
+        setVisible(!visible);
+    };
+
+
+    async function onRefresh() {
+
+        setRefreshing(true);
+
+        await api.get(`cargas/${carga.id}`)
+            .then(response => {
+                navigate('DetalhesCarga', { carga: response.data, usuarioLogado });
+            }).catch(error => {
+                setErroApi(JSON.stringify(error.response.data));
+                toggleOverlay();
+            });
+
+        setRefreshing(false)
+    }
 
     return (
         <View style={styles.container}>
-            <ScrollView style={styles.scrollView}>
-                <PageHeader title="Detalhes da solicitação" />
+            <ScrollView
+                style={styles.scrollView}
+                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+            >
+                <PageHeader title="Detalhes da carga" />
                 <View style={styles.detalhes}>
                     <Text style={styles.label}>Tipo de carga:
                     <Text style={[styles.label, styles.labelContent]}>
@@ -116,7 +182,7 @@ function DetalhesSolicitacao({ route, navigation }: any) {
 
                     <Text style={styles.label}>Endereço de partida:
                     <Text style={[styles.label, styles.labelContent]}>
-                            {carga.enderecoRetirada &&' '
+                            {carga.enderecoRetirada && ' '
                                 + carga.enderecoRetirada.logradouro + ', '
                                 + carga.enderecoRetirada.numero + ', '
                                 + carga.enderecoRetirada.complemento + ', '
@@ -161,32 +227,73 @@ function DetalhesSolicitacao({ route, navigation }: any) {
                         </Text>
                     </Text>
                 </View>
-            
 
-            <Text style={[ styles.label, styles.labelList]}>Negociações: </Text>
+
+                <Text style={[styles.label, styles.labelList]}>Negociações: </Text>
                 <View style={styles.list}>
                     {carga.negociacoes.map((negociacao) => (
-                        <ListItem 
-                            key={negociacao.id} 
-                            onPress={() => {                                
-                                navigate('DetalhesNegociacao', [negociacao, carga.tipoCarga]);
+                        <ListItem
+                            key={negociacao.id}
+                            onPress={() => {
+                                navigate('DetalhesNegociacao', { negociacao, tipoCarga: carga.tipoCarga, usuarioLogado });
                             }}
                             bottomDivider
                         >
                             <ListItem.Content>
-                                <ListItem.Title>{negociacao.status}</ListItem.Title>
+                                <ListItem.Title>Veículo: {negociacao.veiculo.nome}</ListItem.Title>
                                 <ListItem.Subtitle>
-
+                                    Status: {negociacao.status}
                                 </ListItem.Subtitle>
                             </ListItem.Content>
                             <ListItem.Chevron color='grey' />
                         </ListItem>
                     ))}
                 </View>
+                {carga.negociacoes.length == 0 &&
+                    <Text style={styles.textoNegociacoes}>
+                        Ainda não existe nehuma negociação iniciada para esta carga.
+                    </Text>
+                }
+
+                {usuarioLogado.perfil == 'PRESTADOR_SERVICOS' && carga.negociacoes.length == 0 && veiculos.length > 1 &&
+                    <View style={styles.filterGroup}>
+                        <Text style={styles.labelSelect}>Veículo selecionado:</Text>
+                        <View style={styles.selectContainer}>
+                            <Picker
+                                selectedValue={JSON.stringify(veiculo)}
+                                onValueChange={(value) => handleChangeValueVeiculo(JSON.parse(value.toString() || '{}'))}
+                            >
+                                {veiculos.map((veiculo: Veiculo) =>
+                                    <Picker.Item key={veiculo.id} label={veiculo.nome} value={JSON.stringify(veiculo)} />
+                                )}
+
+                            </Picker>
+                        </View>
+                    </View>
+                }
+
+                {usuarioLogado.perfil == 'PRESTADOR_SERVICOS' && carga.negociacoes.length == 0 &&
+                    <TouchableOpacity
+                        style={styles.link}
+                        onPress={() => navigate('CadastroProposta', { cargaId: carga.id, novaNegociacao: true, usuarioLogado, veiculoId: veiculo?.id })}
+                    >
+                        <Text style={styles.textPlus}>+ </Text>
+                        <Text style={styles.textoLink}>Fazer uma proposta</Text>
+                    </TouchableOpacity>
+                }
             </ScrollView>
+
+            <Loader loading={loading} />
+
+            <Overlay overlayStyle={{ width: "90%" }} isVisible={visible} onBackdropPress={toggleOverlay}>
+                <Text style={{ lineHeight: 20 }}>
+                    <Text style={{ fontWeight: "bold", fontSize: 17 }}>{`Erro ao consumir API: \n`}</Text>
+                    <Text>{erroApi}</Text>
+                </Text>
+            </Overlay>
         </View>
 
     );
 }
 
-export default DetalhesSolicitacao;
+export default DetalhesCarga;

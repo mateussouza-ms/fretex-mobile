@@ -13,6 +13,7 @@ import styles from './styles';
 
 import iconeCaminhao from '../../assets/images/icons/caminhao.png';
 import iconeCliente from '../../assets/images/icons/cliente.png';
+import { Overlay } from 'react-native-elements';
 
 
 
@@ -24,14 +25,28 @@ function SelecaoPerfil({ route, navigation }: any) {
 
     const { navigate } = useNavigation();
 
+    const [erroApi, setErroApi] = useState('');
+    const [visible, setVisible] = useState(false);
+
     function handleNavigateToCadastroVeiculoPage() {
         console.log("handleNavigateToCadastroVeiculoPage");
         navigate("CadastroVeiculo", { usuarioId, novoPrestador: true })
     }
 
+    const toggleOverlay = () => {
+        setVisible(!visible);
+    };
+
 
     async function cadastrarCliente() {
-        const response = await api.post(`usuarios/${usuarioId}/perfil/cliente`);
+        await api.post(`usuarios/${usuarioId}/perfil/cliente`)
+            .then(() => {
+                navigate('Inicial', {usuarioLogado: {id: usuarioId, nome: '', perfil: 'CLIENTE'}});
+            })
+            .catch((error) => {
+                setErroApi(JSON.stringify(error.response.data));
+                toggleOverlay();
+            });
     }
 
     return (
@@ -64,6 +79,13 @@ function SelecaoPerfil({ route, navigation }: any) {
                     </RectButton>
                 </View>
             </View>
+
+            <Overlay overlayStyle={{ width: "90%" }} isVisible={visible} onBackdropPress={toggleOverlay}>
+                <Text style={{ lineHeight: 20 }}>
+                    <Text style={{ fontWeight: "bold", fontSize: 17 }}>{`Erro ao consumir API: \n`}</Text>
+                    <Text>{erroApi}</Text>
+                </Text>
+            </Overlay>
         </View>
     );
 }

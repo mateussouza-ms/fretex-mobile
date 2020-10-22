@@ -13,9 +13,12 @@ import { max, obrigatorio, isEmail, min } from '../../valiadacao/validators';
 import api from '../../services/api';
 
 import styles from './styles';
+import Loader from '../../components/Loader';
 
 function CadastroUsuario() {
     const { navigate } = useNavigation();
+    const [loading, setLoading] = useState(false);
+
     const [nome, setNome] = useState('');
     const [email, setEmail] = useState('');
     const [cnp, setCnp] = useState('');
@@ -46,19 +49,19 @@ function CadastroUsuario() {
     };
 
     async function handleSubmit() {
-
         setFormSubmetido(true);
-
+        
         if (!formValido) {
             return;
         }
-
+        
         let tipoPessoa = 'FÍSICA';
-
+        
         if (cnp.length > 11) {
             tipoPessoa = 'JURÍDICA';
         }
-
+        
+        setLoading(true);
         await api
             .post('usuarios', {
                 "nome": nome,
@@ -72,13 +75,13 @@ function CadastroUsuario() {
                 "senha": senha
             })
             .then(response => {
-                console.log(response.data);
                 let { id } = response.data;
                 navigate('SelecaoPerfil', { usuarioId: id, usuarioNome: nome });
             }).catch(error => {
                 setErroApi(JSON.stringify(error.response.data));
                 toggleOverlay();
             });
+            setLoading(false);
     }
 
 
@@ -217,14 +220,16 @@ function CadastroUsuario() {
                     <Text style={styles.buttonText}>Salvar</Text>
                 </RectButton>
 
-                <Overlay overlayStyle={{ width: "90%" }} isVisible={visible} onBackdropPress={toggleOverlay}>
-                    <Text style={{ lineHeight: 20 }}>
-                        <Text style={{ fontWeight: "bold", fontSize: 17 }}>{`Erro ao consumir API: \n`}</Text>
-                        <Text>{erroApi}</Text>
-                    </Text>
-                </Overlay>
-
             </ScrollView>
+
+            <Loader loading={loading} />
+
+            <Overlay overlayStyle={{ width: "90%" }} isVisible={visible} onBackdropPress={toggleOverlay}>
+                <Text style={{ lineHeight: 20 }}>
+                    <Text style={{ fontWeight: "bold", fontSize: 17 }}>{`Erro ao consumir API: \n`}</Text>
+                    <Text>{erroApi}</Text>
+                </Text>
+            </Overlay>
         </View>
     );
 

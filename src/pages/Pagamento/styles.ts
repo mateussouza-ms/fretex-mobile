@@ -7,9 +7,7 @@ const styles = StyleSheet.create({
     },
 
     detalhes: {
-        paddingTop: 10,
-        margin: 10,
-        
+        padding: 5,       
     },
 
     scrollView: {
@@ -24,15 +22,16 @@ const styles = StyleSheet.create({
     selectContainer: {
         borderRadius: 10,
         color: '#000',
-        fontSize: 25,
-        flex: 1,
+        fontSize: 25,       
+        backgroundColor: '#8f8f8f4d',
+        margin: 5,
     },
 
     label: {
         fontSize: 15,
         color: '#000',
         fontFamily: 'Poppins_600SemiBold',
-        margin: 3,
+        lineHeight: 30,
         //backgroundColor: '#e6eff49e',
         borderRadius: 7,
         padding: 2,
@@ -74,7 +73,7 @@ const styles = StyleSheet.create({
     },
     
     listItem: {
-        backgroundColor: '#f0f0f0c7',
+        backgroundColor: '#edededcf',
         margin: 7,
         borderRadius: 15,
         borderWidth: 2,
@@ -82,38 +81,44 @@ const styles = StyleSheet.create({
         padding: 10,
     },
 
-    listItemAceito: {
-        backgroundColor: '#00660047',
-    },
-
-    listItemNaoAceito: {
-        backgroundColor: '#b8b8b89c',
-    },
-
-    subtitle: {
-        lineHeight: 25,
-    },
 
     button: {
         justifyContent: 'center',
         alignItems: 'center',
-        margin: 30,
-        backgroundColor: '#fb5050',
+        margin: 15,
+        backgroundColor: '#005ca3',
         padding: 10,
         borderRadius: 20,
         
-    },
-
-    buttonDisabled:{
-        opacity: 0.4,
-    },
-    
+    },    
 
     buttonText: {
         fontSize: 20,
         color: '#fff',
         fontFamily: "Archivo_700Bold",
+    },
 
+    titleContainer: {
+        padding: 5,
+    },
+    
+    title: {
+        fontFamily: 'Poppins_600SemiBold',
+        color: '#005ca3',
+        fontSize: 20,
+        lineHeight: 45,
+        padding: 5,
+        paddingTop: 10,
+        textAlign: 'center',
+    },
+
+    subtitle: {
+        fontFamily: 'Poppins_400Regular',
+        color: '#005ca3',
+        fontSize: 20,
+        lineHeight: 25,
+        padding: 5,
+        paddingTop: 10,
     },
 })
 

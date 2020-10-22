@@ -11,12 +11,13 @@ import api from '../../services/api';
 import { max, obrigatorio, isEmail, min } from '../../valiadacao/validators';
 
 import styles from './styles';
+import Loader from '../../components/Loader';
 
 function CadastroVeiculo({ route, navigation }: any) {
-
-
     const { usuarioId, novoPrestador } = route.params;
     const { navigate } = useNavigation();
+    const [loading, setLoading] = useState(false);
+
     const [nome, setNome] = useState('');
     const [pesoMaximo, setPesoMaximo] = useState('');
     const [outrasCaracteristicas, setOutrasCaracteristicas] = useState('');
@@ -55,7 +56,8 @@ function CadastroVeiculo({ route, navigation }: any) {
     }
 
     async function novoPrestadorServico() {
-        const response = await api.post(
+        setLoading(true);
+        await api.post(
             `usuarios/${usuarioId}/perfil/prestador-servico`,
             {
                 veiculos: [
@@ -67,17 +69,18 @@ function CadastroVeiculo({ route, navigation }: any) {
                 ]
             }
         ).then(response => {
-            console.log(response.data);
             let { id } = response.data;
-            //navigate('SelecaoPerfil', { usuarioId: id, usuarioNome: nome });
+            navigate('Inicial', { usuarioLogado: { id: usuarioId, nome: '', perfil: 'PRESTADOR_SERVICOS' } });
         }).catch(error => {
             setErroApi(JSON.stringify(error.response.data));
             toggleOverlay();
         });
+        setLoading(false);
     }
 
     async function adicionarVeiculo() {
-        const response = await api.post(
+        setLoading(true);
+        await api.post(
             `usuarios/${usuarioId}/perfil/prestador-servico/veiculos`,
             [
                 {
@@ -94,6 +97,7 @@ function CadastroVeiculo({ route, navigation }: any) {
             setErroApi(JSON.stringify(error.response.data));
             toggleOverlay();
         });
+        setLoading(false);
     }
 
 
@@ -155,14 +159,16 @@ function CadastroVeiculo({ route, navigation }: any) {
                     <Text style={styles.buttonText}>Salvar</Text>
                 </RectButton>
 
-                <Overlay overlayStyle={{ width: "90%" }} isVisible={visible} onBackdropPress={toggleOverlay}>
-                    <Text style={{ lineHeight: 20 }}>
-                        <Text style={{ fontWeight: "bold", fontSize: 17 }}>{`Erro ao consumir API: \n`}</Text>
-                        <Text>{erroApi}</Text>
-                    </Text>
-                </Overlay>
-
             </ScrollView>
+
+            <Loader loading={loading} />
+
+            <Overlay overlayStyle={{ width: "90%" }} isVisible={visible} onBackdropPress={toggleOverlay}>
+                <Text style={{ lineHeight: 20 }}>
+                    <Text style={{ fontWeight: "bold", fontSize: 17 }}>{`Erro ao consumir API: \n`}</Text>
+                    <Text>{erroApi}</Text>
+                </Text>
+            </Overlay>
         </View>
     );
 }

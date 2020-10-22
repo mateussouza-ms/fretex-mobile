@@ -27,8 +27,9 @@ interface Cidade {
     uf: string,
 }
 
-function SolicitacaoFrete() {
+function SolicitacaoFrete({route}: any) {
     const { navigate } = useNavigation();
+    const { usuarioLogado } = route.params;
 
     const [tipoCarga, setTipoCarga] = useState('');
     const [peso, setPeso] = useState('');
@@ -77,7 +78,7 @@ function SolicitacaoFrete() {
         enderecoRetiradaLogradouro: obrigatorio(enderecoRetiradaLogradouro) || max(enderecoRetiradaLogradouro, 120),
         enderecoRetiradaNumero: obrigatorio(enderecoRetiradaNumero) || max(enderecoRetiradaNumero, 20),
         enderecoRetiradaBairro: obrigatorio(enderecoRetiradaBairro) || max(enderecoRetiradaBairro, 50),
-        enderecoRetiradaComplemento: obrigatorio(enderecoRetiradaComplemento) || max(enderecoRetiradaComplemento, 120),
+        enderecoRetiradaComplemento: max(enderecoRetiradaComplemento, 120),
         enderecoRetiradaUf: obrigatorio(enderecoRetiradaUf),
         enderecoRetiradaCidade: obrigatorio(enderecoRetiradaCidade),
 
@@ -85,7 +86,7 @@ function SolicitacaoFrete() {
         enderecoEntregaLogradouro: obrigatorio(enderecoEntregaLogradouro) || max(enderecoEntregaLogradouro, 120),
         enderecoEntregaNumero: obrigatorio(enderecoEntregaNumero) || max(enderecoEntregaNumero, 20),
         enderecoEntregaBairro: obrigatorio(enderecoEntregaBairro) || max(enderecoEntregaBairro, 50),
-        enderecoEntregaComplemento: obrigatorio(enderecoEntregaComplemento) || max(enderecoEntregaComplemento, 120),
+        enderecoEntregaComplemento: max(enderecoEntregaComplemento, 120),
         enderecoEntregaUf: obrigatorio(enderecoEntregaUf),
         enderecoEntregaCidade: obrigatorio(enderecoEntregaCidade),
 
@@ -133,7 +134,7 @@ function SolicitacaoFrete() {
     }, []);
 
     function handleChangeValueEnderecoRetiradaUf(value: UF) {
-        if (value) {
+        if (value.sigla) {
             setEnderecoRetiradaUf(value);
 
             api.get('cidades', {
@@ -147,7 +148,7 @@ function SolicitacaoFrete() {
     }
 
     function handleChangeValueEnderecoEntregaUf(value: UF) {
-        if (value) {
+        if (value.sigla) {
             setEnderecoEntregaUf(value);
 
             api.get('cidades', {
@@ -222,8 +223,7 @@ function SolicitacaoFrete() {
             })
             .then(response => {
                 console.log(response.data);
-                //let { id } = response.data;
-                //navigate('SelecaoPerfil', { usuarioId: id, usuarioNome: tipoCarga });
+                navigate('ListaSolicitacoes', {usuarioLogado})
             }).catch(error => {
                 setErroApi(JSON.stringify(error.response.data));
                 toggleOverlay();
@@ -295,7 +295,7 @@ function SolicitacaoFrete() {
 
                 <Text style={styles.label}>Endereços:</Text>
                 <View style={styles.enderecoContainer}>
-                    <TouchableOpacity style={styles.labelEnderecoContainer} onPressIn={handleToggleEnderecoRetiradaVisible}>
+                    <TouchableOpacity style={styles.labelEnderecoContainer} onPress={handleToggleEnderecoRetiradaVisible}>
                         <Text style={[styles.label, styles.labelEndereco,]}> Endereço de partida</Text>
 
                         {isEnderecoRetiradaVisible && <Image style={[styles.setaCollapse]} source={iconeSetaCima} resizeMode="center" />}
@@ -354,7 +354,7 @@ function SolicitacaoFrete() {
                                 value={enderecoRetiradaNumero}
                                 onChangeText={(enderecoRetiradaNumero) => setEnderecoRetiradaNumero(enderecoRetiradaNumero)}
                                 placeholder="Número"
-                                maxLength={20}
+                                maxLength={20}                            
                             />
 
 
@@ -433,7 +433,7 @@ function SolicitacaoFrete() {
 
 
                 <View style={styles.enderecoContainer}>
-                    <TouchableOpacity style={styles.labelEnderecoContainer} onPressIn={handleToggleEnderecoEntregaVisible}>
+                    <TouchableOpacity style={styles.labelEnderecoContainer} onPress={handleToggleEnderecoEntregaVisible}>
                         <Text style={[styles.label, styles.labelEndereco,]}> Endereço de entrega</Text>
 
                         {isEnderecoEntregaVisible && <Image style={styles.setaCollapse} source={iconeSetaCima} resizeMode="center" />}

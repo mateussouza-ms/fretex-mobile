@@ -9,9 +9,11 @@ import Login from '../pages/Login';
 import Inicial from '../pages/Inicial';
 import SolicitacaoFrete from '../pages/SolicitacaoFrete';
 import ListaSolicitacoes from '../pages/ListaSolicitacoes';
-import DetalhesSolicitacao from '../pages/DetalhesSolicitacao';
+import DetalhesCarga from '../pages/DetalhesCarga';
 import DetalhesNegociacao from '../pages/DetalhesNegociacao';
 import CadastroProposta from '../pages/CadastroProposta';
+import Pagamento from '../pages/Pagamento';
+import NegociacaoFinalizada from '../pages/NegociacaoFinalizada';
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -46,9 +48,11 @@ function AppStack() {
                 <Screen name="Inicial" component={Inicial} />
                 <Screen name="SolicitacaoFrete" component={SolicitacaoFrete} />
                 <Screen name="ListaSolicitacoes" component={ListaSolicitacoes} />
-                <Screen name="DetalhesSolicitacao" component={DetalhesSolicitacao} />
+                <Screen name="DetalhesCarga" component={DetalhesCarga} />
                 <Screen name="DetalhesNegociacao" component={DetalhesNegociacao} />
                 <Screen name="CadastroProposta" component={CadastroProposta} />
+                <Screen name="Pagamento" component={Pagamento} />
+                <Screen name="NegociacaoFinalizada" component={NegociacaoFinalizada} />
             </Navigator>
         </NavigationContainer>
     );
