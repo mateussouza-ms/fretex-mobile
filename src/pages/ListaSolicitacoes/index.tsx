@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, ScrollView, Text, TextInput, FlatList, RefreshControl } from 'react-native';
 import { BorderlessButton, RectButton } from 'react-native-gesture-handler';
-import { Feather } from '@expo/vector-icons';
 
 import PageHeader from '../../components/PageHeader';
 

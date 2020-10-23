@@ -12,6 +12,7 @@ import api from '../../services/api';
 import styles from './styles';
 
 import landingImg from '../../assets/images/logo-fretex.png';
+import { useAuth } from '../../contexts/auth';
 
 function Login() {
     const { navigate } = useNavigation();
@@ -24,8 +25,10 @@ function Login() {
 
     const [checked, setChecked] = useState(false);
 
-    async function handleSubmit() {
+    const {signIn} = useAuth();
 
+    async function handleSubmit() {
+        signIn();
     }
 
     function handleNavigateToCadastroUsuarioPage() {

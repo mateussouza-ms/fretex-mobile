@@ -14,14 +14,14 @@ import styles from './styles';
 import iconeCaminhao from '../../assets/images/icons/caminhao.png';
 import iconeCliente from '../../assets/images/icons/cliente.png';
 import { Overlay } from 'react-native-elements';
+import { useAuth } from '../../contexts/auth';
 
 
 
-function SelecaoPerfil({ route, navigation }: any) {
+const SelecaoPerfil: React.FC = () => {
+    const {usuarioLogado} = useAuth();
 
-    const { usuarioId, usuarioNome } = route.params;
-
-    let primeiroNome = usuarioNome.split(' ')[0]
+    let primeiroNome = usuarioLogado?.nome.split(' ')[0]
 
     const { navigate } = useNavigation();
 
@@ -30,7 +30,7 @@ function SelecaoPerfil({ route, navigation }: any) {
 
     function handleNavigateToCadastroVeiculoPage() {
         console.log("handleNavigateToCadastroVeiculoPage");
-        navigate("CadastroVeiculo", { usuarioId, novoPrestador: true })
+        navigate("CadastroVeiculo", { usuarioId: 1, novoPrestador: true })
     }
 
     const toggleOverlay = () => {
@@ -39,9 +39,9 @@ function SelecaoPerfil({ route, navigation }: any) {
 
 
     async function cadastrarCliente() {
-        await api.post(`usuarios/${usuarioId}/perfil/cliente`)
+        await api.post(`usuarios/${1}/perfil/cliente`)
             .then(() => {
-                navigate('Inicial', {usuarioLogado: {id: usuarioId, nome: '', perfil: 'CLIENTE'}});
+                navigate('Inicial', {usuarioLogado: {id: 1, nome: '', perfil: 'CLIENTE'}});
             })
             .catch((error) => {
                 setErroApi(JSON.stringify(error.response.data));
