@@ -11,42 +11,52 @@ import DetalhesNegociacao from '../pages/DetalhesNegociacao';
 import CadastroProposta from '../pages/CadastroProposta';
 import Pagamento from '../pages/Pagamento';
 import NegociacaoFinalizada from '../pages/NegociacaoFinalizada';
+import { useAuth } from '../contexts/auth';
 
 const AppStack = createStackNavigator();
 
-const AppRoutes: React.FC = () => (
-  <AppStack.Navigator screenOptions={{ headerShown: false }}>
-    <AppStack.Screen
-      name="SelecaoPerfil"
-      component={SelecaoPerfil}
-      options={
-        {
-          gestureEnabled: true,
-          gestureDirection: "horizontal",
-          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS
+const AppRoutes: React.FC = () => {
+  const { usuarioLogado } = useAuth();
+  return (
+    <AppStack.Navigator 
+      initialRouteName={!usuarioLogado?.perfilSelecionado ? 'SelecaoPerfil' : 'Inicial'} 
+      screenOptions={{ headerShown: false }}
+    >
+      <AppStack.Screen
+        name="SelecaoPerfil"
+        component={SelecaoPerfil}
+        options={
+          {
+            gestureEnabled: true,
+            gestureDirection: "horizontal",
+            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS
+          }
         }
-      }
-    />
-    <AppStack.Screen
-      name="CadastroVeiculo"
-      component={CadastroVeiculo}
-      options={
-        {
-          gestureEnabled: true,
-          gestureDirection: "horizontal",
-          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS
+      />
+      <AppStack.Screen
+        name="CadastroVeiculo"
+        component={CadastroVeiculo}
+        options={
+          {
+            gestureEnabled: true,
+            gestureDirection: "horizontal",
+            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS
+          }
         }
-      }
-    />
-    <AppStack.Screen name="Inicial" component={Inicial} />
-    <AppStack.Screen name="SolicitacaoFrete" component={SolicitacaoFrete} />
-    <AppStack.Screen name="ListaSolicitacoes" component={ListaSolicitacoes} />
-    <AppStack.Screen name="DetalhesCarga" component={DetalhesCarga} />
-    <AppStack.Screen name="DetalhesNegociacao" component={DetalhesNegociacao} />
-    <AppStack.Screen name="CadastroProposta" component={CadastroProposta} />
-    <AppStack.Screen name="Pagamento" component={Pagamento} />
-    <AppStack.Screen name="NegociacaoFinalizada" component={NegociacaoFinalizada} />
-  </AppStack.Navigator>
-);
+      />
+      <AppStack.Screen name="Inicial" component={Inicial} />
+      <AppStack.Screen name="SolicitacaoFrete" component={SolicitacaoFrete} />
+      <AppStack.Screen name="ListaSolicitacoes" component={ListaSolicitacoes} />
+      <AppStack.Screen name="DetalhesCarga" component={DetalhesCarga} />
+      <AppStack.Screen name="DetalhesNegociacao" component={DetalhesNegociacao} />
+      <AppStack.Screen name="CadastroProposta" component={CadastroProposta} />
+      <AppStack.Screen name="Pagamento" component={Pagamento} />
+      <AppStack.Screen name="NegociacaoFinalizada" component={NegociacaoFinalizada} />
+    </AppStack.Navigator>
+  );
+}
+
+
+
 
 export default AppRoutes;

@@ -12,10 +12,11 @@ import { max, obrigatorio, isEmail, min } from '../../valiadacao/validators';
 
 import styles from './styles';
 import Loader from '../../components/Loader';
+import { useAuth } from '../../contexts/auth';
 
 function CadastroProposta({ route, navigation }: any) {
-
-    const { cargaId, negociacaoId, novaNegociacao, usuarioLogado, veiculoId } = route.params;
+    const { usuarioLogado } = useAuth();
+    const { cargaId, negociacaoId, novaNegociacao, veiculoId } = route.params;
     const { navigate } = useNavigation();
 
     const [loading, setLoading] = useState(false);
@@ -68,7 +69,7 @@ function CadastroProposta({ route, navigation }: any) {
                     valor,
                     justificativa,
                     usuarioResponsavel: {
-                        id: usuarioLogado.id
+                        id: usuarioLogado?.id
                     }
                 }
             }
@@ -90,7 +91,7 @@ function CadastroProposta({ route, navigation }: any) {
                 valor,
                 justificativa,
                 usuarioResponsavel: {
-                    id: usuarioLogado.id,
+                    id: usuarioLogado?.id,
                 }
             }
         ).then(response => {

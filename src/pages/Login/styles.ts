@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
         fontFamily: "Archivo_700Bold",
         color: '#fff',
         marginLeft: 10,
-        marginBottom: -7,
+        marginBottom: 5,
         fontSize: 25,
     },
 
@@ -98,7 +98,15 @@ const styles = StyleSheet.create({
 
     checkboxText: {
         color: '#fff'
-    }
+    },
+
+    textoErro: {
+        color: '#d85a5ae3',
+        fontSize: 14,
+        marginLeft: 10,
+        marginRight: 10,
+        fontFamily: 'Poppins_600SemiBold'
+    },
 })
 
 export default styles;

@@ -7,6 +7,7 @@ import backIcon from '../../assets/images/icons/back.png';
 import logoImg from '../../assets/images/logo-fretex-icone-lado.png';
 
 import styles from './styles';
+import { useAuth } from '../../contexts/auth';
 
 interface PageHeaderProps {
     title: string;
@@ -15,9 +16,11 @@ interface PageHeaderProps {
 
 const PageHeader: React.FC<PageHeaderProps> = ({title, headerRight, children}) => {
     const { navigate } = useNavigation();
+    const {signOut} = useAuth();
 
     function handleGoBack() {
-        navigate('Landing');
+        //navigate('Landing');
+        signOut();
     }
 
     return (

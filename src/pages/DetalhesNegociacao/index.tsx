@@ -15,46 +15,46 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import CadastroProposta from '../CadastroProposta';
 import { number } from 'yup';
 import Loader from '../../components/Loader';
+import { useAuth } from '../../contexts/auth';
 
 function DetalhesNegociacao({ route, navigation }: any) {
     const { navigate } = useNavigation();
     const [loading, setLoading] = useState(false);
 
-    const { usuarioLogado } = route.params;
+    const { usuarioLogado } = useAuth();
 
     const [tipoCarga, setTipoCarga] = useState('');
 
     const [erroApi, setErroApi] = useState('');
     const [visible, setVisible] = useState(false);
 
-    const [negociacao, setNegociacao] = useState(
-        {
-            id: '',
-            cargaId: '',
-            veiculo: {
-                id: '',
-                prestadorServicoId: '',
-                nome: '',
-                pesoMaximo: '',
-                outrasCaracteristicas: ''
-            },
-            status: '',
-            finalizacaoNegociacao: '',
-            propostas: [
-                {
-                    id: '',
-                    valor: 0.00,
-                    justificativa: '',
-                    aceita: false,
-                    usuarioResponsavel: {
-                        id: number,
-                        nome: '',
-                    },
-                    dataCriacao: ''
-                }
-            ]
-        }
-    );
+    const [negociacao, setNegociacao] = useState<{
+        id: string,
+        cargaId: string,
+        veiculo: {
+            id: string,
+            prestadorServicoId: string,
+            nome: string,
+            pesoMaximo: string,
+            outrasCaracteristicas: string
+        },
+        status: string,
+        finalizacaoNegociacao: string,
+        propostas: [
+            {
+                id: string,
+                valor: number,
+                justificativa: string,
+                aceita: boolean,
+                usuarioResponsavel: {
+                    id: number,
+                    nome: string,
+                },
+                dataCriacao: string
+            }
+        ]
+    }
+    >();
 
     useFocusEffect(() => {
         const { negociacao, tipoCarga } = route.params;
@@ -87,9 +87,9 @@ function DetalhesNegociacao({ route, navigation }: any) {
     async function aceitarProposta(proposta: any) {
 
         setLoading(true);
-        if (usuarioLogado.perfil == 'PRESTADOR_SERVICOS') {
+        if (usuarioLogado?.perfilSelecionado == 'PRESTADOR_SERVICOS') {
             await api.post(
-                `cargas/${negociacao.cargaId}/negociacoes/${negociacao.id}/propostas`,
+                `cargas/${negociacao?.cargaId}/negociacoes/${negociacao?.id}/propostas`,
                 {
                     valor: proposta.valor,
                     justificativa: 'PROPOSTA ACEITA PELO PRESTADOR',
@@ -106,13 +106,13 @@ function DetalhesNegociacao({ route, navigation }: any) {
             });
         } else {
             await api.patch(
-                `cargas/${negociacao.cargaId}/negociacoes/${negociacao.id}/propostas/${proposta.id}`,
+                `cargas/${negociacao?.cargaId}/negociacoes/${negociacao?.id}/propostas/${proposta.id}`,
                 {
                     aceita: true,
-                    usuarioId: usuarioLogado.id
+                    usuarioId: usuarioLogado?.id
                 }
             ).then(response => {
-                navigate('Pagamento', { finalizacaoNegociacao: response.data, cargaId: negociacao.cargaId, negociacaoId: negociacao.id })
+                navigate('Pagamento', { finalizacaoNegociacao: response.data, cargaId: negociacao?.cargaId, negociacaoId: negociacao?.id })
             }).catch(error => {
                 setErroApi(JSON.stringify(error.response.data));
                 toggleOverlay();
@@ -122,7 +122,7 @@ function DetalhesNegociacao({ route, navigation }: any) {
     }
 
     function contrapropor() {
-        navigate('CadastroProposta', { cargaId: negociacao.cargaId, negociacaoId: negociacao.id, novaNegociacao: false, usuarioLogado, veiculoId: negociacao.veiculo.id })
+        navigate('CadastroProposta', { cargaId: negociacao?.cargaId, negociacaoId: negociacao?.id, novaNegociacao: false, usuarioLogado, veiculoId: negociacao?.veiculo.id })
     }
 
     function confirmarCancelamento() {
@@ -147,7 +147,7 @@ function DetalhesNegociacao({ route, navigation }: any) {
 
     async function handleCancelarNegociacao() {
         setLoading(true);
-        api.delete(`cargas/${negociacao.cargaId}/negociacoes/${negociacao.id}`)
+        api.delete(`cargas/${negociacao?.cargaId}/negociacoes/${negociacao?.id}`)
             .catch(error => {
                 setErroApi(JSON.stringify(error.response.data));
                 toggleOverlay();
@@ -165,7 +165,7 @@ function DetalhesNegociacao({ route, navigation }: any) {
 
         setRefreshing(true);
 
-        await api.get(`cargas/${negociacao.cargaId}/negociacoes/${negociacao.id}`)
+        await api.get(`cargas/${negociacao?.cargaId}/negociacoes/${negociacao?.id}`)
             .then(response => {
                 let negociacao = response.data;
                 navigate('DetalhesNegociacao', { negociacao, tipoCarga: negociacao.tipoCarga, usuarioLogado });
@@ -191,16 +191,16 @@ function DetalhesNegociacao({ route, navigation }: any) {
                 <Text style={styles.label}>Veículo:
                     <Text style={[styles.label, styles.labelContent]}>
                         {' '
-                            + negociacao.veiculo.nome + ' - '
-                            + (negociacao.veiculo.outrasCaracteristicas && negociacao.veiculo.outrasCaracteristicas + ' (')
-                            + 'suporta até ' + negociacao.veiculo.pesoMaximo + ' Kg)'
+                            + negociacao?.veiculo.nome + ' - '
+                            + (negociacao?.veiculo.outrasCaracteristicas && negociacao?.veiculo.outrasCaracteristicas + ' (')
+                            + 'suporta até ' + negociacao?.veiculo.pesoMaximo + ' Kg)'
                         }
                     </Text>
                 </Text>
 
                 <Text style={styles.label}>Situação:
                 <Text style={[styles.label, styles.labelContent]}>
-                        {' ' + (negociacao.status == 'ABERTA' ? 'EM NEGOCIAÇÃO' : negociacao.status)}
+                        {' ' + (negociacao?.status == 'ABERTA' ? 'EM NEGOCIAÇÃO' : negociacao?.status)}
                     </Text>
                 </Text>
             </View>
@@ -212,7 +212,7 @@ function DetalhesNegociacao({ route, navigation }: any) {
                 refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
             >
                 <View style={styles.list}>
-                    {negociacao.propostas.map((proposta) => (
+                    {negociacao?.propostas.map((proposta) => (
                         <ListItem
                             key={proposta.id}
                             bottomDivider
@@ -244,8 +244,8 @@ function DetalhesNegociacao({ route, navigation }: any) {
                                     textStyle={styles.buttonListText}
                                     disabled={
                                         proposta.aceita != null
-                                        || proposta.usuarioResponsavel.id == usuarioLogado.id
-                                        || negociacao.status != 'ABERTA'
+                                        || proposta.usuarioResponsavel.id == usuarioLogado?.id
+                                        || negociacao?.status != 'ABERTA'
                                     }
                                     disabledStyle={[styles.buttonList, proposta.aceita == true ? styles.listItemAceito : proposta.aceita == false && styles.listItemNaoAceito]}
                                 >
@@ -256,8 +256,8 @@ function DetalhesNegociacao({ route, navigation }: any) {
                         </ListItem>
                     ))}
                     <RectButton
-                        enabled={negociacao.status == 'ABERTA'}
-                        style={[styles.button, negociacao.status != 'ABERTA' ? styles.buttonDisabled : null]}
+                        enabled={negociacao?.status == 'ABERTA'}
+                        style={[styles.button, negociacao?.status != 'ABERTA' ? styles.buttonDisabled : null]}
                         onPress={confirmarCancelamento}
                     >
                         <Text style={styles.buttonText}>Cancelar negociação</Text>

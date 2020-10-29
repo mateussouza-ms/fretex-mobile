@@ -13,6 +13,7 @@ import { Picker } from '@react-native-community/picker';
 import { format } from 'date-fns';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import Loader from '../../components/Loader';
+import { useAuth } from '../../contexts/auth';
 
 interface Veiculo {
     id: number,
@@ -26,7 +27,7 @@ function DetalhesCarga({ route, navigation }: any) {
     const { navigate } = useNavigation();
     const [loading, setLoading] = useState(false);
 
-    const { usuarioLogado } = route.params;
+    const { usuarioLogado } = useAuth();
     const [veiculos, setVeiculos] = useState([]);
     const [veiculo, setVeiculo] = useState<Veiculo>();
 
@@ -106,7 +107,7 @@ function DetalhesCarga({ route, navigation }: any) {
         const { carga } = route.params;
         setCarga(carga);
 
-        if (usuarioLogado.perfil == 'PRESTADOR_SERVICOS' && veiculos.length == 0) {
+        if (usuarioLogado?.perfilSelecionado == 'PRESTADOR_SERVICOS' && veiculos.length == 0) {
             api.get(`usuarios/${usuarioLogado.id}/perfil/prestador-servico`)
                 .then(response => {
                     const { veiculos } = response.data;
@@ -215,7 +216,7 @@ function DetalhesCarga({ route, navigation }: any) {
                             {carga.dataCadastro && ' ' + format(new Date(carga.dataCadastro), "dd/MM/yyyy HH:mm:ss")}
                         </Text>
                     </Text>
-
+                {/*
                     <Text style={styles.label}>Data de retirada:
                     <Text style={[styles.label, styles.labelContent]}>
                             {carga.dataRetirada ? ' ' + format(new Date(carga.dataRetirada), "dd/MM/yyyy HH:mm:ss") : ' Sem registro'}
@@ -226,6 +227,7 @@ function DetalhesCarga({ route, navigation }: any) {
                             {carga.dataEntrega ? ' ' + format(new Date(carga.dataEntrega), "dd/MM/yyyy HH:mm:ss") : ' Sem registro'}
                         </Text>
                     </Text>
+                */}
                 </View>
 
 
@@ -255,7 +257,7 @@ function DetalhesCarga({ route, navigation }: any) {
                     </Text>
                 }
 
-                {usuarioLogado.perfil == 'PRESTADOR_SERVICOS' && carga.negociacoes.length == 0 && veiculos.length > 1 &&
+                {usuarioLogado?.perfilSelecionado == 'PRESTADOR_SERVICOS' && carga.negociacoes.length == 0 && veiculos.length > 1 &&
                     <View style={styles.filterGroup}>
                         <Text style={styles.labelSelect}>Veículo selecionado:</Text>
                         <View style={styles.selectContainer}>
@@ -272,7 +274,7 @@ function DetalhesCarga({ route, navigation }: any) {
                     </View>
                 }
 
-                {usuarioLogado.perfil == 'PRESTADOR_SERVICOS' && carga.negociacoes.length == 0 &&
+                {usuarioLogado?.perfilSelecionado == 'PRESTADOR_SERVICOS' && carga.negociacoes.length == 0 &&
                     <TouchableOpacity
                         style={styles.link}
                         onPress={() => navigate('CadastroProposta', { cargaId: carga.id, novaNegociacao: true, usuarioLogado, veiculoId: veiculo?.id })}

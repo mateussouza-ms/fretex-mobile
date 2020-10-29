@@ -11,9 +11,11 @@ import { Icon, ListItem, Overlay } from 'react-native-elements';
 import { Picker } from '@react-native-community/picker';
 import { useNavigation } from '@react-navigation/native';
 import Loader from '../../components/Loader';
+import { useAuth } from '../../contexts/auth';
 
-function ListaSolicitacoes({ route }: any) {
+function ListaSolicitacoes() {
     const { navigate } = useNavigation();
+    const { usuarioLogado } = useAuth();
 
     const [loading, setLoading] = useState(false);
 
@@ -65,7 +67,6 @@ function ListaSolicitacoes({ route }: any) {
 
     ]);
 
-    const { usuarioLogado } = route.params;
 
     const [situacaoFiltro, setSituacaoFiltro] = useState('');
 
@@ -81,8 +82,8 @@ function ListaSolicitacoes({ route }: any) {
         await api.get('cargas', {
             params: {
                 situacao,
-                usuarioId: usuarioLogado.id,
-                usuarioPerfil: usuarioLogado.perfil,
+                usuarioId: usuarioLogado?.id,
+                usuarioPerfil: usuarioLogado?.perfilSelecionado,
             }
         }).then(response => {
             setCargas(response.data);
@@ -105,13 +106,13 @@ function ListaSolicitacoes({ route }: any) {
         setRefreshing(true);
 
         //await handleFilterSubmit(situacaoFiltro);
-console.log(JSON.stringify(usuarioLogado));
+        console.log(JSON.stringify(usuarioLogado));
         setRefreshing(false)
     }
 
     return (
         <View style={styles.container}>
-            <PageHeader title={usuarioLogado.perfil == 'CLIENTE' ? 'Lista de solicitações' : 'Lista de cargas'} />
+            <PageHeader title={usuarioLogado?.perfilSelecionado == 'CLIENTE' ? 'Lista de solicitações' : 'Lista de cargas'} />
 
             <View style={styles.filterGroup}>
                 <Text style={styles.label}>Situação da carga: </Text>
@@ -141,7 +142,7 @@ console.log(JSON.stringify(usuarioLogado));
                         <ListItem
                             key={carga.id}
                             onPress={() => {
-                                navigate('DetalhesCarga', { carga, usuarioLogado });
+                                navigate('DetalhesCarga', { carga });
                             }}
                             containerStyle={styles.listItem}
                             bottomDivider
@@ -169,11 +170,11 @@ console.log(JSON.stringify(usuarioLogado));
             <Loader loading={loading} />
 
             <Overlay overlayStyle={{ width: "90%" }} isVisible={visible} onBackdropPress={toggleOverlay}>
-                    <Text style={{ lineHeight: 20 }}>
-                        <Text style={{ fontWeight: "bold", fontSize: 17 }}>{`Erro ao consumir API: \n`}</Text>
-                        <Text>{erroApi}</Text>
-                    </Text>
-                </Overlay>
+                <Text style={{ lineHeight: 20 }}>
+                    <Text style={{ fontWeight: "bold", fontSize: 17 }}>{`Erro ao consumir API: \n`}</Text>
+                    <Text>{erroApi}</Text>
+                </Text>
+            </Overlay>
         </View>
 
     );

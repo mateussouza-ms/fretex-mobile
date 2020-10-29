@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, Image } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 
@@ -11,11 +11,17 @@ import styles from './styles';
 
 import iconeSolicitarFrete from '../../assets/images/icons/solicitar-frete.png';
 import iconeListaNegociacoes from '../../assets/images/icons/lista-negociacoes.png';
+import { useAuth } from '../../contexts/auth';
 
 
-function Inicial({ route }: any) {
+const Inicial: React.FC = () => {
     const { navigate } = useNavigation();
-    const { usuarioLogado } = route.params;
+    const { usuarioLogado } = useAuth();
+
+useEffect(() =>{
+    console.log('Inicial');
+    console.log('usuarioLogado?: ' + JSON.stringify(usuarioLogado));
+})
 
     return (
         <View style={styles.container}>
@@ -23,9 +29,9 @@ function Inicial({ route }: any) {
 
             <View style={styles.body}>
                 <View style={styles.buttonsContainer}>
-                    {usuarioLogado.perfil == 'CLIENTE' &&
+                    {usuarioLogado?.perfilSelecionado == 'CLIENTE' &&
                         <RectButton
-                            onPress={() => { navigate('SolicitacaoFrete', {usuarioLogado}) }}
+                            onPress={() => { navigate('SolicitacaoFrete') }}
                             style={styles.button}
                         >
                             <Image source={iconeSolicitarFrete} />
@@ -34,11 +40,11 @@ function Inicial({ route }: any) {
                     }
 
                     <RectButton
-                        onPress={() => { navigate('ListaSolicitacoes', {usuarioLogado}) }}
+                        onPress={() => { navigate('ListaSolicitacoes') }}
                         style={styles.button}>
                         <Image source={iconeListaNegociacoes} />
 
-                        {usuarioLogado.perfil == 'CLIENTE' 
+                        {usuarioLogado?.perfilSelecionado == 'CLIENTE' 
                         ? <Text style={styles.buttonText}>Listar solicitações de cargas</Text>
                         : <Text style={styles.buttonText}>Listar ofertas de cargas</Text>
                         }

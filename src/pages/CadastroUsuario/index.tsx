@@ -14,10 +14,13 @@ import api from '../../services/api';
 
 import styles from './styles';
 import Loader from '../../components/Loader';
+import { useAuth } from '../../contexts/auth';
 
 function CadastroUsuario() {
     const { navigate } = useNavigation();
     const [loading, setLoading] = useState(false);
+
+    const { signIn } = useAuth();
 
     const [nome, setNome] = useState('');
     const [email, setEmail] = useState('');
@@ -50,17 +53,17 @@ function CadastroUsuario() {
 
     async function handleSubmit() {
         setFormSubmetido(true);
-        
+
         if (!formValido) {
             return;
         }
-        
+
         let tipoPessoa = 'FÍSICA';
-        
+
         if (cnp.length > 11) {
             tipoPessoa = 'JURÍDICA';
         }
-        
+
         setLoading(true);
         await api
             .post('usuarios', {
@@ -75,13 +78,13 @@ function CadastroUsuario() {
                 "senha": senha
             })
             .then(response => {
-                let { id } = response.data;
-                navigate('SelecaoPerfil', { usuarioId: id, usuarioNome: nome });
+                signIn({email_cnp: email, senha});
+                //navigate('SelecaoPerfil');
             }).catch(error => {
                 setErroApi(JSON.stringify(error.response.data));
                 toggleOverlay();
             });
-            setLoading(false);
+        setLoading(false);
     }
 
 

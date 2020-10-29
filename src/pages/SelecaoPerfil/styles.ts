@@ -39,10 +39,18 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
     },
 
+    buttonContainer: {
+        height: 160,
+        width: '48%',
+        backgroundColor: '#fff',
+        borderRadius: 8,
+        padding: 5,
+        justifyContent: "space-between",
+    },
+
     button: {
         height: 150,
-        width: '48%',
-        backgroundColor: '#333',
+        //width: '48%',
         borderRadius: 8,
         padding: 20,
         justifyContent: "space-between",
@@ -69,7 +77,12 @@ const styles = StyleSheet.create({
         lineHeight: 20,
         maxWidth: 145,
         marginTop: 40,
-    }
+    },
+    
+    selecionado: {
+       backgroundColor:'#ed5a5aba',
+       elevation: 15,
+    },
 
 })
 

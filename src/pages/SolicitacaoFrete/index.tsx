@@ -15,6 +15,7 @@ import iconeSetaBaixo from '../../assets/images/icons/icone-seta-baixo.png';
 import api from '../../services/api';
 
 import styles from './styles';
+import { useAuth } from '../../contexts/auth';
 
 interface UF {
     sigla: string,
@@ -27,9 +28,9 @@ interface Cidade {
     uf: string,
 }
 
-function SolicitacaoFrete({route}: any) {
+function SolicitacaoFrete() {
     const { navigate } = useNavigation();
-    const { usuarioLogado } = route.params;
+    const { usuarioLogado } = useAuth();
 
     const [tipoCarga, setTipoCarga] = useState('');
     const [peso, setPeso] = useState('');
@@ -223,7 +224,7 @@ function SolicitacaoFrete({route}: any) {
             })
             .then(response => {
                 console.log(response.data);
-                navigate('ListaSolicitacoes', {usuarioLogado})
+                navigate('ListaSolicitacoes')
             }).catch(error => {
                 setErroApi(JSON.stringify(error.response.data));
                 toggleOverlay();
@@ -289,7 +290,7 @@ function SolicitacaoFrete({route}: any) {
                     value={observacoes}
                     onChangeText={(observacoes) => setObservacoes(observacoes)}
                     placeholder="Observações sobre a carga"
-                    maxLength={20}
+                    maxLength={120}
                 />
 
 

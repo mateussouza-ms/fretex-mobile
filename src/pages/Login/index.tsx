@@ -3,32 +3,47 @@ import { View, ScrollView, Text, TextInput, Image } from 'react-native';
 import { RectButton, TouchableOpacity } from 'react-native-gesture-handler';
 import { Link, useNavigation } from '@react-navigation/native';
 
-import { CheckBox } from 'react-native-elements'
-
-import PageHeader from '../../components/PageHeader';
-
-import api from '../../services/api';
+import { CheckBox, Overlay } from 'react-native-elements'
 
 import styles from './styles';
 
 import landingImg from '../../assets/images/logo-fretex.png';
 import { useAuth } from '../../contexts/auth';
+import Loader from '../../components/Loader';
 
 function Login() {
     const { navigate } = useNavigation();
-    const [nome, setNome] = useState('');
-    const [email, setEmail] = useState('');
-    const [cpf, setCpf] = useState('');
-    const [dddTelefone, setDddTelefone] = useState('');
-    const [numeroTelefone, setNumeroTelefone] = useState('');
+
+    const [email_cnp, setEmail_cnp] = useState('');
     const [senha, setSenha] = useState('');
 
     const [checked, setChecked] = useState(false);
 
-    const {signIn} = useAuth();
+    const [erroLogin, setErroLogin] = useState(false);
+
+    const [erroApi, setErroApi] = useState('');
+    const [visible, setVisible] = useState(false);
+    const [loading, setLoading] = useState(false);
+
+    const { signIn } = useAuth();
+
+    const toggleOverlay = () => {
+        setVisible(!visible);
+    };
 
     async function handleSubmit() {
-        signIn();
+        setLoading(true);
+        signIn({ email_cnp, senha }, checked).catch(erro => {
+            const { error } = JSON.parse(erro.message);
+            if (error == 'invalid_grant') {
+                setErroLogin(true);
+            } else {
+                setErroApi('Ocorreu um erro inesperado. Favor entrar em contato com o suporte do sistema.');
+                toggleOverlay();
+            }
+        });
+        
+        setLoading(false);
     }
 
     function handleNavigateToCadastroUsuarioPage() {
@@ -37,7 +52,7 @@ function Login() {
     }
 
     function handleNavigateToRecuperarSenhaPage() {
-        navigate('SelecaoPerfil', {usuarioId: 9, usuarioNome: "mateus"});
+        navigate('SelecaoPerfil', { usuarioId: 9, usuarioNome: "mateus" });
         //navigate('Inicial', { usuarioLogado: { id: 2, nome: '', perfil: 'PRESTADOR_SERVICOS' } });
     }
 
@@ -49,17 +64,15 @@ function Login() {
             <Image source={landingImg} style={styles.banner} />
 
             <Text style={styles.title}>Fazer login</Text>
+            <Text style={styles.textoErro}> {erroLogin && 'Usuário ou senha inválidos!'}</Text>
 
-            <Text style={styles.label}>E-mail:</Text>
             <TextInput
                 style={styles.input}
-                value={email}
-                onChangeText={(email) => setEmail(email)}
-                placeholder="E-mail"
-                keyboardType="email-address"
+                value={email_cnp}
+                onChangeText={(email_cnp) => setEmail_cnp(email_cnp)}
+                placeholder="E-mail ou CPF/CNPJ"
             />
 
-            <Text style={styles.label}>Senha:</Text>
             <TextInput
                 style={styles.input}
                 value={senha}
@@ -89,7 +102,7 @@ function Login() {
                     <Text style={styles.textLink}>Esqueci minha senha</Text>
                 </TouchableOpacity>
             </View>
-
+            {/*
             <View style={{
                 flexDirection: 'row',
                 alignItems: 'center',
@@ -128,6 +141,16 @@ function Login() {
                     <Text style={styles.buttonText}>Prestador</Text>
                 </RectButton>
             </View>
+*/}
+
+            <Loader loading={loading} />
+            
+            <Overlay overlayStyle={{ width: "90%" }} isVisible={visible} onBackdropPress={toggleOverlay}>
+                <Text style={{ lineHeight: 20 }}>
+
+                    <Text>{erroApi}</Text>
+                </Text>
+            </Overlay>
 
         </View>
     );

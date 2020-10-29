@@ -7,15 +7,19 @@ interface Response {
   usuarioLogado: UsuarioLogado;
 }
 
-export async function signIn(): Promise<Response> {
-  console.log('signIn()');
+export interface Credenciais {
+  email_cnp: string,
+  senha: string,
+}
+
+export async function signIn(credenciais: Credenciais): Promise<Response> {
 
   var formdata = new FormData();
   formdata.append('grant_type', 'password');
-  formdata.append('username', 'mateus@gmail.com');
-  formdata.append('password', 'mateus');
+  formdata.append('username', credenciais.email_cnp);
+  formdata.append('password', credenciais.senha);
 
-  var username = 'insomnia';
+  var username = 'fretex-mobile';
   var password = '123';
   var basicAuth = 'Basic ' + btoa(username + ':' + password);
 
@@ -29,13 +33,13 @@ export async function signIn(): Promise<Response> {
       }
     }
   ).catch(error => {
-    throw new Error("Erro ao obter token: " + JSON.stringify(error.response.data));
+    throw new Error(JSON.stringify(error?.response?.data));
   });
 
   console.log(JSON.stringify("Resposta do token request: " + JSON.stringify(responseAuthorization.data)));
 
   if (!responseAuthorization) {
-    throw new Error("Problema ao obter token.")
+    throw new Error("Problema ao obter token.");
   }
 
   const { access_token } = responseAuthorization.data;
@@ -46,30 +50,20 @@ export async function signIn(): Promise<Response> {
       headers: { Authorization: 'Bearer ' + access_token }
     }
   ).catch((error) => {
-    throw new Error("Erro ao obter dados do usuário: " + JSON.stringify(error.response.data));
+    throw new Error("Erro ao obter dados do usuário: " + JSON.stringify(error?.response?.data));
   });
 
-  console.log(JSON.stringify("Resposta dos dados do usuário: " + JSON.stringify(responseAuthorization.data)));
+  console.log(JSON.stringify("Resposta dos dados do usuário: " + JSON.stringify(responseUserAuth.data)));
 
 
   const { usuarioId, usuarioNome, authorities} = responseUserAuth.data;
 
-  var usuarioLogado = {
-    id: usuarioId,
-    nome: usuarioNome,
-    perfis: [],
-  };
+  var perfisUsuario: string[] = [];
 
-
-
-  const perfisUsuario: [{ perfil: string; selecionado: false; }] = JSON.parse(JSON.stringify(authorities).replace('authority', 'perfil'));
-  
-  perfisUsuario.forEach(perfil => {
-    console.log('perfil: ' + perfil.perfil + '| selecionado: ' + perfil.selecionado);
-    perfil.selecionado = false;
+  authorities.forEach((authoritie: {authority: string}) => {
+    perfisUsuario = [...perfisUsuario, authoritie.authority]
   });
 
-  console.log(JSON.stringify(perfisUsuario));
 
   const response: Response = {
     token: access_token,
@@ -77,6 +71,7 @@ export async function signIn(): Promise<Response> {
       id: usuarioId,
       nome: usuarioNome,
       perfis: perfisUsuario,
+      perfilSelecionado: null,
     }
   };
 

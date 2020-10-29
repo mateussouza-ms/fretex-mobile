@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, ScrollView, Text, TextInput } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
@@ -12,9 +12,11 @@ import { max, obrigatorio, isEmail, min } from '../../valiadacao/validators';
 
 import styles from './styles';
 import Loader from '../../components/Loader';
+import { useAuth } from '../../contexts/auth';
 
-function CadastroVeiculo({ route, navigation }: any) {
-    const { usuarioId, novoPrestador } = route.params;
+const CadastroVeiculo: React.FC = () => {
+    const { usuarioLogado, adicionarPerfil } = useAuth();
+    const [novoPrestador, setNovoPrestador] = useState(false);
     const { navigate } = useNavigation();
     const [loading, setLoading] = useState(false);
 
@@ -35,6 +37,12 @@ function CadastroVeiculo({ route, navigation }: any) {
     const formPreenchido = (nome != '' && pesoMaximo != '');
     const formValido = (!errors.nome && !errors.pesoMaximo);
 
+
+    useEffect(() => {
+        if (usuarioLogado?.perfis.indexOf('PRESTADOR_SERVICOS') == -1) {
+            setNovoPrestador(true);
+        }
+    });
 
     const toggleOverlay = () => {
         setVisible(!visible);
@@ -58,7 +66,7 @@ function CadastroVeiculo({ route, navigation }: any) {
     async function novoPrestadorServico() {
         setLoading(true);
         await api.post(
-            `usuarios/${usuarioId}/perfil/prestador-servico`,
+            `usuarios/${usuarioLogado?.id}/perfil/prestador-servico`,
             {
                 veiculos: [
                     {
@@ -69,8 +77,8 @@ function CadastroVeiculo({ route, navigation }: any) {
                 ]
             }
         ).then(response => {
-            let { id } = response.data;
-            navigate('Inicial', { usuarioLogado: { id: usuarioId, nome: '', perfil: 'PRESTADOR_SERVICOS' } });
+            adicionarPerfil('PRESTADOR_SERVICOS');
+                navigate('Inicial');
         }).catch(error => {
             setErroApi(JSON.stringify(error.response.data));
             toggleOverlay();
@@ -81,7 +89,7 @@ function CadastroVeiculo({ route, navigation }: any) {
     async function adicionarVeiculo() {
         setLoading(true);
         await api.post(
-            `usuarios/${usuarioId}/perfil/prestador-servico/veiculos`,
+            `usuarios/${usuarioLogado?.id}/perfil/prestador-servico/veiculos`,
             [
                 {
                     nome,
