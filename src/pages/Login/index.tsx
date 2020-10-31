@@ -52,7 +52,7 @@ function Login() {
     }
 
     function handleNavigateToRecuperarSenhaPage() {
-        navigate('SelecaoPerfil', { usuarioId: 9, usuarioNome: "mateus" });
+        navigate('RecuperacaoSenha');
         //navigate('Inicial', { usuarioLogado: { id: 2, nome: '', perfil: 'PRESTADOR_SERVICOS' } });
     }
 

@@ -78,7 +78,7 @@ function CadastroUsuario() {
                 "senha": senha
             })
             .then(response => {
-                signIn({email_cnp: email, senha});
+                signIn({email_cnp: email, senha}, false);
                 //navigate('SelecaoPerfil');
             }).catch(error => {
                 setErroApi(JSON.stringify(error.response.data));
