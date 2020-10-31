@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, Alert, BackHandler } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 
 import { useNavigation } from '@react-navigation/native';
@@ -18,8 +18,9 @@ import { useAuth, UsuarioLogado } from '../../contexts/auth';
 
 
 
-const SelecaoPerfil: React.FC = () => {
+function SelecaoPerfil() {
     const { usuarioLogado, alterarPerfil, adicionarPerfil } = useAuth();
+
 
     let primeiroNome = usuarioLogado?.nome.split(' ')[0]
 
@@ -27,6 +28,42 @@ const SelecaoPerfil: React.FC = () => {
 
     const [erroApi, setErroApi] = useState('');
     const [visible, setVisible] = useState(false);
+
+
+    const navigation = useNavigation();
+    useEffect(
+        React.useCallback(() => {
+            const onBackPress = () => {
+
+                if (navigation.canGoBack()) {
+                    return false;
+                }
+
+                Alert.alert(
+                    "Confirmação",
+                    "Realmente deseja fechar o aplicativo?",
+                    [
+                        {
+                            text: "Cancelar",
+                            onPress: () => { return false },
+                            style: "cancel"
+                        },
+                        {
+                            text: "SIM",
+                            onPress: () => { BackHandler.exitApp() }
+                        }
+                    ],
+                    { cancelable: true, }
+                );
+                return true;
+            };
+
+            BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+            return () =>
+                BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+        }, [])
+    );
 
     function handlePerfilCliente() {
         if (usuarioLogado?.perfis.indexOf('CLIENTE') == -1) {

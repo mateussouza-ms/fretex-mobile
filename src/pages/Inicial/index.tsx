@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, Alert } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 
 import { useNavigation } from '@react-navigation/native';
@@ -17,11 +17,8 @@ import { useAuth } from '../../contexts/auth';
 const Inicial: React.FC = () => {
     const { navigate } = useNavigation();
     const { usuarioLogado } = useAuth();
-
-useEffect(() =>{
-    console.log('Inicial');
-    console.log('usuarioLogado?: ' + JSON.stringify(usuarioLogado));
-})
+    
+    
 
     return (
         <View style={styles.container}>
