@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
     container: {
-        padding: 25,
+        paddingVertical: 25,
         backgroundColor: '#4682B4',
         height: 100
     },
@@ -35,6 +35,98 @@ const styles = StyleSheet.create({
         maxWidth: 2000,
         marginVertical: 10,
     },
+
+    modalContainer: {
+        flex: 1,
+        justifyContent: "flex-start",
+        alignItems: "flex-end",
+        marginTop: 22,
+    },
+
+    modalClose: {
+        alignSelf: 'flex-start',
+        marginTop: -25,
+        marginLeft: -20,
+        fontSize: 18,
+        marginBottom: 5,
+    },
+
+    modalView: {
+        marginVertical: 20,
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+        width: 250,
+        height: 'auto',
+    },
+
+    modalText: {
+        textAlign: "center",
+        fontWeight: 'bold',
+    },
+
+    modalButtonsGroup: {
+        marginTop: 30,
+        alignItems: "center",
+        width: '100%',
+    },
+
+    modalButton: {
+        backgroundColor: "#2196F3",
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2,
+        width: '80%',
+        marginVertical: 5,
+    },
+
+    modalButtonText: {
+        color: "white",
+        fontWeight: "bold",
+        textAlign: "center"
+    },
+
+    avatar: {
+        marginTop: 5,
+        marginRight: 5,        
+        width: 40,
+        height: 40,
+        marginBottom: -3,
+        borderRadius: 50
+    },
+
+    avatarCliente: {
+        borderWidth: 3,
+        borderColor: '#9871F5',
+    },
+    
+    avatarPrestador: {
+        borderWidth: 3,
+        borderColor: '#04D361',
+    },
+
+    link: {
+        marginTop: 10,
+        flexDirection: "row",
+        alignItems: "center",
+        alignSelf: 'center',
+    },
+
+    textoLink: {
+        color: '#02459d', 
+        textDecorationLine: 'underline'
+    },
+
+
 })
 
 export default styles;
