@@ -8,11 +8,13 @@ import PageHeader from '../../components/PageHeader';
 
 import api from '../../services/api';
 
-import { max, obrigatorio, isEmail, min } from '../../valiadacao/validators';
+import { max, obrigatorio, min } from '../../valiadacao/validators';
 
 import styles from './styles';
 import Loader from '../../components/Loader';
 import { useAuth } from '../../contexts/auth';
+import { Alert } from 'react-native';
+import { Picker } from '@react-native-community/picker';
 
 const CadastroVeiculo: React.FC = () => {
     const { usuarioLogado, adicionarPerfil } = useAuth();
@@ -20,7 +22,9 @@ const CadastroVeiculo: React.FC = () => {
     const { navigate } = useNavigation();
     const [loading, setLoading] = useState(false);
 
+    const [tipoVeiculo, setTipoVeiculo] = useState('');
     const [nome, setNome] = useState('');
+    const [placa, setPlaca] = useState('');
     const [pesoMaximo, setPesoMaximo] = useState('');
     const [outrasCaracteristicas, setOutrasCaracteristicas] = useState('');
 
@@ -30,12 +34,20 @@ const CadastroVeiculo: React.FC = () => {
 
 
     const errors = {
-        nome: obrigatorio(nome) || max(nome, 30),
+        tipoVeiculo: tipoVeiculo != 'Outros' && (obrigatorio(tipoVeiculo) || max(tipoVeiculo, 30)),
+        nome: tipoVeiculo == 'Outros' && (obrigatorio(nome) || max(nome, 30)),
+        placa: obrigatorio(placa) || min(placa, 7) || max(placa, 7),
         pesoMaximo: obrigatorio(pesoMaximo) || min(pesoMaximo, 0),
     };
 
-    const formPreenchido = (nome != '' && pesoMaximo != '');
-    const formValido = (!errors.nome && !errors.pesoMaximo);
+    const formPreenchido =
+        (
+            (tipoVeiculo == 'Outros' && nome != '') || (tipoVeiculo != 'Outros' && tipoVeiculo != '')
+        )
+        && placa != ''
+        && pesoMaximo != '';
+
+    const formValido = (!errors.tipoVeiculo && !errors.nome && !errors.placa && !errors.pesoMaximo);
 
 
     useEffect(() => {
@@ -68,17 +80,14 @@ const CadastroVeiculo: React.FC = () => {
         await api.post(
             `usuarios/${usuarioLogado?.id}/perfil/prestador-servico`,
             {
-                veiculos: [
-                    {
-                        nome,
-                        pesoMaximo,
-                        outrasCaracteristicas
-                    }
-                ]
+                nome: tipoVeiculo == 'Outros' ? nome : tipoVeiculo,
+                placa,
+                pesoMaximo,
+                outrasCaracteristicas
             }
         ).then(response => {
             adicionarPerfil('PRESTADOR_SERVICOS');
-                navigate('Inicial');
+            navigate('Inicial');
         }).catch(error => {
             setErroApi(JSON.stringify(error.response.data));
             toggleOverlay();
@@ -90,17 +99,29 @@ const CadastroVeiculo: React.FC = () => {
         setLoading(true);
         await api.post(
             `usuarios/${usuarioLogado?.id}/perfil/prestador-servico/veiculos`,
-            [
-                {
-                    nome,
-                    pesoMaximo,
-                    outrasCaracteristicas
-                }
-            ]
+            {
+                nome: tipoVeiculo == 'Outros' ? nome : tipoVeiculo,
+                placa,
+                pesoMaximo,
+                outrasCaracteristicas
+            }
         ).then(response => {
-            console.log(response.data);
-            let { id } = response.data;
-            //navigate('SelecaoPerfil', { usuarioId: id, usuarioNome: nome });
+            Alert.alert(
+                "Sucesso!",
+                "Veículo [" + (tipoVeiculo || nome) + "] adicionado com sucesso.",
+                [
+                    {
+                        text: "OK",
+                    }
+                ],
+                { cancelable: true }
+            );
+            setTipoVeiculo('');
+            setNome('');
+            setPlaca('');
+            setPesoMaximo('');
+            setOutrasCaracteristicas('');
+            setFormSubmetido(false);
         }).catch(error => {
             setErroApi(JSON.stringify(error.response.data));
             toggleOverlay();
@@ -120,18 +141,57 @@ const CadastroVeiculo: React.FC = () => {
                         && errors.nome
                         && <Text style={styles.textoValidacao}>{`\b${errors.nome}`}</Text>}
                 </Text>
+                <View style={styles.selectContainer}>
+                    <Picker
+                        selectedValue={tipoVeiculo}
+                        onValueChange={(itemValue) => setTipoVeiculo(itemValue.toString())}
+                        mode="dropdown"
+                    >
+
+                        <Picker.Item color='gray' value={''} label='Selecione o tipo de veículo' />
+                        <Picker.Item value={'Motoneta'} label='Motoneta' />
+                        <Picker.Item value={'Motocicleta'} label='Motocicleta' />
+                        <Picker.Item value={'Triciclo'} label='Triciclo' />
+                        <Picker.Item value={'Quadriciclo'} label='Quadriciclo' />
+                        <Picker.Item value={'Caminhonete'} label='Caminhonete' />
+                        <Picker.Item value={'Caminhão'} label='Caminhão' />
+                        <Picker.Item value={'Reboque ou semi-reboque'} label='Reboque ou semi-reboque' />
+                        <Picker.Item value={'Outros'} label='Outros' />
+
+                    </Picker>
+                </View>
+
+                {tipoVeiculo == 'Outros' &&
+                    <TextInput
+                        style={
+                            [
+                                styles.input,
+                                formSubmetido && errors.nome ? styles.inputError : null
+                            ]
+                        }
+                        value={nome}
+                        onChangeText={(nome) => setNome(nome)}
+                        placeholder="Informe aqui o tipo do veículo"
+                    />
+                }
+
+                <Text style={styles.label}>Placa:
+                {formSubmetido
+                        && errors.placa
+                        && <Text style={styles.textoValidacao}>{`\b${errors.placa}`}</Text>}
+                </Text>
                 <TextInput
                     style={
                         [
                             styles.input,
-                            formSubmetido && errors.nome ? styles.inputError : null
+                            formSubmetido && errors.placa ? styles.inputError : null
                         ]
                     }
-                    value={nome}
-                    onChangeText={(nome) => setNome(nome)}
-                    placeholder="Ex: Caminhão baú, Camionete"
+                    value={placa}
+                    onChangeText={(placa) => setPlaca(placa.toUpperCase())}
+                    placeholder="Placa (somente letras e números)"
+                    maxLength={7}
                 />
-
 
                 <Text style={styles.label}>Peso máximo de carga:
                 {formSubmetido

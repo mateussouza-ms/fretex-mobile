@@ -95,6 +95,14 @@ const styles = StyleSheet.create({
         borderWidth: 1,
     },
 
+    selectContainer: {
+        borderRadius: 10,
+        color: '#000',
+        fontSize: 25,       
+        backgroundColor: '#e6e6fa',
+        margin: 10,
+    },
+
 })
 
 export default styles;
