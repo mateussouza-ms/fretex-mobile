@@ -80,13 +80,22 @@ const CadastroVeiculo: React.FC = () => {
         await api.post(
             `usuarios/${usuarioLogado?.id}/perfil/prestador-servico`,
             {
-                nome: tipoVeiculo == 'Outros' ? nome : tipoVeiculo,
-                placa,
-                pesoMaximo,
-                outrasCaracteristicas
+                veiculo: {
+                    nome: tipoVeiculo == 'Outros' ? nome : tipoVeiculo,
+                    placa,
+                    pesoMaximo,
+                    outrasCaracteristicas
+                }
             }
         ).then(response => {
             adicionarPerfil('PRESTADOR_SERVICOS');
+            setTipoVeiculo('');
+            setNome('');
+            setPlaca('');
+            setPesoMaximo('');
+            setOutrasCaracteristicas('');
+            setFormSubmetido(false);
+            setNovoPrestador(false);
             navigate('Inicial');
         }).catch(error => {
             setErroApi(JSON.stringify(error.response.data));
