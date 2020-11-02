@@ -13,6 +13,7 @@ import CadastroProposta from '../pages/CadastroProposta';
 import Pagamento from '../pages/Pagamento';
 import NegociacaoFinalizada from '../pages/NegociacaoFinalizada';
 import { useAuth } from '../contexts/auth';
+import AlteracaoSenha from '../pages/AlteracaoSenha';
 
 const AppStack = createStackNavigator();
 
@@ -53,6 +54,7 @@ const AppRoutes: React.FC = () => {
       <AppStack.Screen name="CadastroProposta" component={CadastroProposta} />
       <AppStack.Screen name="Pagamento" component={Pagamento} />
       <AppStack.Screen name="NegociacaoFinalizada" component={NegociacaoFinalizada} />
+      <AppStack.Screen name="AlteracaoSenha" component={AlteracaoSenha} />
     </AppStack.Navigator>
   );
 }

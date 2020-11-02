@@ -101,7 +101,9 @@ const styles = StyleSheet.create({
         width: 40,
         height: 40,
         marginBottom: -3,
-        borderRadius: 50
+        borderRadius: 50,
+        borderWidth: 2,
+        borderColor: '#4682B4',
     },
 
     avatarCliente: {

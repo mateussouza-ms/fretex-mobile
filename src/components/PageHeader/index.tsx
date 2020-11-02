@@ -73,7 +73,8 @@ const PageHeader: React.FC<PageHeaderProps> = ({ title, headerRight, children })
                             <TouchableHighlight
                                 style={styles.modalButton}
                                 onPress={() => {
-                                    
+                                    navigate("AlteracaoSenha");
+                                    setModalVisible(false);
                                 }}
                             >
                                 <Text style={styles.modalButtonText}>Alterar senha</Text>
@@ -83,7 +84,8 @@ const PageHeader: React.FC<PageHeaderProps> = ({ title, headerRight, children })
                                 <TouchableHighlight
                                     style={styles.modalButton}
                                     onPress={() => {
-                                       
+                                        navigate("CadastroVeiculo");
+                                        setModalVisible(false);
                                     }}
                                 >
                                     <Text style={styles.modalButtonText}>Adicionar veículo</Text>
