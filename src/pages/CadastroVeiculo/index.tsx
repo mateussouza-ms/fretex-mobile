@@ -117,7 +117,7 @@ const CadastroVeiculo: React.FC = () => {
         ).then(response => {
             Alert.alert(
                 "Sucesso!",
-                "Veículo [" + (tipoVeiculo || nome) + "] adicionado com sucesso.",
+                "Veículo [" + (tipoVeiculo == 'Outros' ? nome : tipoVeiculo) + "] adicionado com sucesso.",
                 [
                     {
                         text: "OK",
