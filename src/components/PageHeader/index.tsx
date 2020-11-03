@@ -95,7 +95,8 @@ const PageHeader: React.FC<PageHeaderProps> = ({ title, headerRight, children })
                             <TouchableHighlight
                                 style={styles.modalButton}
                                 onPress={() => {
-                                    
+                                    navigate('AtualizacaoCadastro');
+                                    setModalVisible(false);
                                 }}
                             >
                                 <Text style={styles.modalButtonText}>Atualizar cadastro</Text>
@@ -118,18 +119,20 @@ const PageHeader: React.FC<PageHeaderProps> = ({ title, headerRight, children })
                 </BorderlessButton>*/}
 
                 <Image style={styles.logo} source={logoImg} resizeMode="contain" />
-                <Avatar
-                    containerStyle={[
-                        styles.avatar,
-                        usuarioLogado?.perfilSelecionado == 'CLIENTE' && styles.avatarCliente,
-                        usuarioLogado?.perfilSelecionado == 'PRESTADOR_SERVICOS' && styles.avatarPrestador
-                    ]}
-                    //avatarStyle= {{borderWidth: 5, borderColor: '#9871F5'}}
+                {usuarioLogado &&
+                    <Avatar
+                        containerStyle={[
+                            styles.avatar,
+                            usuarioLogado?.perfilSelecionado == 'CLIENTE' && styles.avatarCliente,
+                            usuarioLogado?.perfilSelecionado == 'PRESTADOR_SERVICOS' && styles.avatarPrestador
+                        ]}
+                        //avatarStyle= {{borderWidth: 5, borderColor: '#9871F5'}}
 
-                    onPress={() => setModalVisible(true)}
-                    rounded
-                    source={AvatarImage}
-                />
+                        onPress={() => setModalVisible(true)}
+                        rounded
+                        source={AvatarImage}
+                    />
+                }
             </View>
 
 

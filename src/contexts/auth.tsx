@@ -18,6 +18,7 @@ interface AuthContextData {
   signOut(): void;
   alterarPerfil(perfil: string): void;
   adicionarPerfil(perfil: string): void;
+  setUsuarioLogado(usuarioLogado: UsuarioLogado): void;
 }
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
@@ -96,7 +97,7 @@ const AuthProvider: React.FC = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ signed: !!usuarioLogado, usuarioLogado, loading, signIn, signOut, alterarPerfil, adicionarPerfil }}>
+      value={{ signed: !!usuarioLogado, usuarioLogado, loading, signIn, signOut, alterarPerfil, adicionarPerfil, setUsuarioLogado }}>
       {children}
     </AuthContext.Provider>
   );
