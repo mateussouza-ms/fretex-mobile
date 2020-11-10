@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, ScrollView, Text, TextInput } from 'react-native';
+import { View, ScrollView, Text, TextInput, Alert } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import { Overlay } from 'react-native-elements';
@@ -41,7 +41,7 @@ function RecuperacaoSenha() {
 
     function handleSubmit() {
         setLoading(true);
-        
+
         setFormSubmetido(true);
 
         if (!formValido) {
@@ -62,8 +62,19 @@ function RecuperacaoSenha() {
             navigate('RedefinicaoSenha');
         }).catch(error => {
             setLoading(false);
-            setErroApi(JSON.stringify(error.response.data));
-            toggleOverlay();
+            if (error.message == 'Request failed with status code 404') {
+                Alert.alert(
+                    'E-mail não cadastrado'
+                    , 'Não existe nenhum usuário cadastrado com o e-mail informado.'
+                    , [
+                        {
+                            text: "OK",
+                        }
+                    ]);
+            } else {
+                setErroApi(JSON.stringify(error));
+                toggleOverlay();
+            }
         });
 
     }
@@ -98,7 +109,7 @@ function RecuperacaoSenha() {
                 style={[styles.button, !formPreenchido ? styles.buttonDisabled : null]}
                 onPress={handleSubmit}
             >
-                <Text style={styles.buttonText}>Salvar</Text>
+                <Text style={styles.buttonText}>Enviar</Text>
             </RectButton>
 
             <Loader loading={loading} />

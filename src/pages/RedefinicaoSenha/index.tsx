@@ -42,7 +42,6 @@ function RedefinicaoSenha() {
     };
 
     function handleSubmit() {
-        setLoading(true);
         setFormSubmetido(true);
 
         if (!formValido) {
