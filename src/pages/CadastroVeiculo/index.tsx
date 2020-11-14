@@ -197,7 +197,8 @@ const CadastroVeiculo: React.FC = () => {
                         ]
                     }
                     value={placa}
-                    onChangeText={(placa) => setPlaca(placa.toUpperCase())}
+                    onChangeText={text => setPlaca(text)}
+                    onBlur={() => setPlaca(placa.toUpperCase())}
                     placeholder="Placa (somente letras e números)"
                     maxLength={7}
                 />

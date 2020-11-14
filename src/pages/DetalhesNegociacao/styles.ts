@@ -108,6 +108,10 @@ const styles = StyleSheet.create({
         opacity: 0.4,
     },
     
+    buttonDatas:{
+        backgroundColor: '#035e03',
+        marginTop: 0,
+    },
 
     buttonText: {
         fontSize: 20,

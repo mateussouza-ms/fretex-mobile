@@ -23,7 +23,7 @@ function DetalhesNegociacao({ route, navigation }: any) {
 
     const { usuarioLogado } = useAuth();
 
-    
+
     const [erroApi, setErroApi] = useState('');
     const [visible, setVisible] = useState(false);
     const [carga, setCarga] = useState(
@@ -198,11 +198,11 @@ function DetalhesNegociacao({ route, navigation }: any) {
     }
 
     function contrapropor(propostaAnterior: any) {
-        var novaVarga = carga;
-        novaVarga.dataEntregaPretendida = propostaAnterior.dataEntrega;
-        novaVarga.dataRetiradaPretendida = propostaAnterior.dataRetirada;
+        var novaCarga = carga;
+        novaCarga.dataEntregaPretendida = propostaAnterior.dataEntrega;
+        novaCarga.dataRetiradaPretendida = propostaAnterior.dataRetirada;
 
-        navigate('CadastroProposta', { carga: novaVarga, negociacaoId: negociacao?.id, novaNegociacao: false, usuarioLogado, veiculoId: negociacao?.veiculo.id })
+        navigate('CadastroProposta', { carga: novaCarga, negociacaoId: negociacao?.id, novaNegociacao: false, usuarioLogado, veiculoId: negociacao?.veiculo.id })
     }
 
     function confirmarCancelamento() {
@@ -344,6 +344,33 @@ function DetalhesNegociacao({ route, navigation }: any) {
                     >
                         <Text style={styles.buttonText}>Cancelar negociação</Text>
                     </RectButton>
+
+                    {usuarioLogado?.perfilSelecionado == 'PRESTADOR_SERVICOS'
+                        && negociacao?.status == 'FINALIZADA_COM_ACORDO'
+                        && !carga.dataRetirada
+                        &&
+                        <RectButton
+                            enabled={negociacao?.status == 'FINALIZADA_COM_ACORDO'}
+                            style={[styles.button, styles.buttonDatas]}
+                            onPress={() => navigate('InformacaoRetirada', { carga })}
+                        >
+                            <Text style={styles.buttonText}>Informar retirada</Text>
+                        </RectButton>
+                    }
+
+                    {usuarioLogado?.perfilSelecionado == 'PRESTADOR_SERVICOS'
+                        && negociacao?.status == 'FINALIZADA_COM_ACORDO'
+                        && !!carga.dataRetirada
+                        && !carga.dataEntrega
+                        &&
+                        <RectButton
+                            enabled={negociacao?.status == 'FINALIZADA_COM_ACORDO'}
+                            style={[styles.button, styles.buttonDatas]}
+                            onPress={() => navigate('InformacaoEntrega', { carga })}
+                        >
+                            <Text style={styles.buttonText}>Informar entrega</Text>
+                        </RectButton>
+                    }
                 </View>
 
                 <Loader loading={loading} />

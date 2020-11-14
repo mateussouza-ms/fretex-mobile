@@ -216,11 +216,11 @@ function DetalhesCarga({ route, navigation }: any) {
 
                     <Text style={styles.label}>Data de cadastro:
                     <Text style={[styles.label, styles.labelContent]}>
-                            {carga.dataCadastro && ' ' + format(new Date(carga.dataCadastro), "dd/MM/yyyy HH:mm:ss")}
+                            {carga.dataCadastro && ' ' + format(new Date(carga.dataCadastro), "dd/MM/yyyy HH:mm")}
                         </Text>
                     </Text>
 
-                    {!!carga.dataEntregaPretendida &&
+                    {!!carga.dataEntregaPretendida && !carga.dataRetirada &&
                         <Text style={styles.label}>Data de retirada pretendida:
                             <Text style={[styles.label, styles.labelContent]}>
                                 {' ' + format(new Date(carga.dataRetiradaPretendida), "dd/MM/yyyy")}
@@ -228,7 +228,7 @@ function DetalhesCarga({ route, navigation }: any) {
                         </Text>
                     }
 
-                    {!!carga.dataEntregaPretendida &&
+                    {!!carga.dataEntregaPretendida && !carga.dataRetirada &&
                         <Text style={styles.label}>Data de entrega pretendida:
                             <Text style={[styles.label, styles.labelContent]}>
                                 {' ' + format(new Date(carga.dataEntregaPretendida), "dd/MM/yyyy")}
@@ -236,7 +236,7 @@ function DetalhesCarga({ route, navigation }: any) {
                         </Text>
                     }
 
-                    {(!!carga.dataEntregaPretendida || !!carga.dataEntregaPretendida) &&
+                    {(!!carga.dataEntregaPretendida || !!carga.dataEntregaPretendida) && !carga.dataRetirada &&
                         <Text style={styles.label}>Aceita negociação de datas:
                             <Text style={[styles.label, styles.labelContent]}>
                                 {carga.negociaDatas ? ' SIM' : ' NÃO'}
@@ -247,7 +247,7 @@ function DetalhesCarga({ route, navigation }: any) {
                     {!!carga.dataRetirada &&
                         <Text style={styles.label}>Data de retirada:
                             <Text style={[styles.label, styles.labelContent]}>
-                                {format(new Date(carga.dataRetirada), "dd/MM/yyyy HH:mm:ss")}
+                                {' ' + format(new Date(carga.dataRetirada), "dd/MM/yyyy HH:mm")}
                             </Text>
                         </Text>
                     }
@@ -255,7 +255,7 @@ function DetalhesCarga({ route, navigation }: any) {
                     {!!carga.dataEntrega &&
                         <Text style={styles.label}>Data de entrega:
                             <Text style={[styles.label, styles.labelContent]}>
-                                {format(new Date(carga.dataEntrega), "dd/MM/yyyy HH:mm:ss")}
+                                {' ' + format(new Date(carga.dataEntrega), "dd/MM/yyyy HH:mm")}
                             </Text>
                         </Text>
                     }

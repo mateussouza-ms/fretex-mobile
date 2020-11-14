@@ -26,8 +26,8 @@ function CadastroProposta({ route, navigation }: any) {
     const [showDatePickerRetirada, setShowDatePickerRetirada] = useState(false);
     const [showDatePickerEntrega, setShowDatePickerEntrega] = useState(false);
 
-    const [dataRetirada, setDataRetirada] = useState<Date | null>(new Date(carga.dataRetiradaPretendida));
-    const [dataEntrega, setDataEntrega] = useState<Date | null>(new Date(carga.dataEntregaPretendida));
+    const [dataRetirada, setDataRetirada] = useState<Date | null>(new Date(carga.dataRetiradaPretendida ? carga.dataRetiradaPretendida : new Date()));
+    const [dataEntrega, setDataEntrega] = useState<Date | null>(new Date(carga.dataEntregaPretendida ? carga.dataEntregaPretendida : new Date()));
     const [valor, setValor] = useState('');
     const [justificativa, setJustificativa] = useState('');
     const [usuarioResponsavel, setUsuarioResponsavel] = useState({ id: '' });

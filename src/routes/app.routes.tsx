@@ -15,14 +15,16 @@ import NegociacaoFinalizada from '../pages/NegociacaoFinalizada';
 import { useAuth } from '../contexts/auth';
 import AlteracaoSenha from '../pages/AlteracaoSenha';
 import AtualizacaoCadastro from '../pages/AtualizacaoCadastro';
+import InformacaoRetirada from '../pages/InformacaoRetirada';
+import InformacaoEntrega from '../pages/InformacaoEntrega';
 
 const AppStack = createStackNavigator();
 
 const AppRoutes: React.FC = () => {
   const { usuarioLogado } = useAuth();
   return (
-    <AppStack.Navigator 
-      initialRouteName={!usuarioLogado?.perfilSelecionado ? 'SelecaoPerfil' : 'Inicial'} 
+    <AppStack.Navigator
+      initialRouteName={!usuarioLogado?.perfilSelecionado ? 'SelecaoPerfil' : 'Inicial'}
       screenOptions={{ headerShown: false }}
     >
       <AppStack.Screen
@@ -57,6 +59,8 @@ const AppRoutes: React.FC = () => {
       <AppStack.Screen name="NegociacaoFinalizada" component={NegociacaoFinalizada} />
       <AppStack.Screen name="AlteracaoSenha" component={AlteracaoSenha} />
       <AppStack.Screen name="AtualizacaoCadastro" component={AtualizacaoCadastro} />
+      <AppStack.Screen name="InformacaoRetirada" component={InformacaoRetirada} />
+      <AppStack.Screen name="InformacaoEntrega" component={InformacaoEntrega} />
     </AppStack.Navigator>
   );
 }
