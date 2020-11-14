@@ -130,7 +130,19 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 10,
         marginBottom: 20,
-    }
+    },
+
+    checkboxContainer: {
+        backgroundColor: 'transparent',
+        borderColor: 'transparent',
+        marginTop: -5,
+        marginLeft: 2,
+    },
+
+    checkboxText: {
+        fontFamily: 'Poppins_400Regular',
+        fontWeight: 'normal',
+    },
 
 })
 

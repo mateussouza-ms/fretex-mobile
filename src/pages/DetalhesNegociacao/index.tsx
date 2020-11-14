@@ -23,10 +23,82 @@ function DetalhesNegociacao({ route, navigation }: any) {
 
     const { usuarioLogado } = useAuth();
 
-    const [tipoCarga, setTipoCarga] = useState('');
-
+    
     const [erroApi, setErroApi] = useState('');
     const [visible, setVisible] = useState(false);
+    const [carga, setCarga] = useState(
+        {
+            id: '',
+            clienteId: '',
+            tipoCarga: '',
+            peso: '',
+            enderecoRetirada: {
+                cep: '',
+                logradouro: '',
+                numero: '',
+                bairro: '',
+                complemento: '',
+                cidade: {
+                    id: '',
+                    nome: '',
+                    uf: {
+                        sigla: '',
+                        nome: '',
+                    }
+                }
+            },
+            enderecoEntrega: {
+                cep: '',
+                logradouro: '',
+                numero: '',
+                bairro: '',
+                complemento: '',
+                cidade: {
+                    id: '',
+                    nome: '',
+                    uf: {
+                        sigla: '',
+                        nome: '',
+                    }
+                }
+            },
+            observacoes: '',
+            dataCadastro: '',
+            dataRetirada: '',
+            dataEntrega: '',
+            dataRetiradaPretendida: '',
+            dataEntregaPretendida: '',
+            negociaDatas: false,
+            negociacoes: [
+                {
+                    id: '',
+                    cargaId: '',
+                    veiculo: {
+                        id: '',
+                        prestadorServicoId: '',
+                        nome: '',
+                        pesoMaximo: '',
+                        outrasCaracteristicas: ''
+                    },
+                    status: '',
+                    finalizacaoNegociacao: '',
+                    propostas: [
+                        {
+                            id: '',
+                            valor: '',
+                            justificativa: '',
+                            aceita: '',
+                            usuarioResponsavel: {
+                                id: '',
+                                nome: '',
+                            },
+                            dataCriacao: ''
+                        }
+                    ]
+                }
+            ],
+        },
+    );
 
     const [negociacao, setNegociacao] = useState<{
         id: string,
@@ -50,16 +122,18 @@ function DetalhesNegociacao({ route, navigation }: any) {
                     id: number,
                     nome: string,
                 },
-                dataCriacao: string
+                dataCriacao: string,
+                dataRetirada: Date,
+                dataEntrega: Date,
             }
         ]
     }
     >();
 
     useFocusEffect(() => {
-        const { negociacao, tipoCarga } = route.params;
+        const { negociacao, carga } = route.params;
         setNegociacao(negociacao);
-        setTipoCarga(tipoCarga);
+        setCarga(carga);
     });
 
     function confirmarAceitacao(proposta: any) {
@@ -95,11 +169,13 @@ function DetalhesNegociacao({ route, navigation }: any) {
                     justificativa: 'PROPOSTA ACEITA PELO PRESTADOR',
                     usuarioResponsavel: {
                         id: usuarioLogado.id,
-                    }
+                    },
+                    dataRetirada: proposta.dataRetirada,
+                    dataEntrega: proposta.dataEntrega,
                 }
             ).then(response => {
                 let negociacao = response.data;
-                navigate('DetalhesNegociacao', { negociacao, tipoCarga: negociacao.tipoCarga, usuarioLogado });
+                navigate('DetalhesNegociacao', { negociacao, carga, usuarioLogado });
             }).catch(error => {
                 setErroApi(JSON.stringify(error.response.data));
                 toggleOverlay();
@@ -121,8 +197,12 @@ function DetalhesNegociacao({ route, navigation }: any) {
         setLoading(false);
     }
 
-    function contrapropor() {
-        navigate('CadastroProposta', { cargaId: negociacao?.cargaId, negociacaoId: negociacao?.id, novaNegociacao: false, usuarioLogado, veiculoId: negociacao?.veiculo.id })
+    function contrapropor(propostaAnterior: any) {
+        var novaVarga = carga;
+        novaVarga.dataEntregaPretendida = propostaAnterior.dataEntrega;
+        novaVarga.dataRetiradaPretendida = propostaAnterior.dataRetirada;
+
+        navigate('CadastroProposta', { carga: novaVarga, negociacaoId: negociacao?.id, novaNegociacao: false, usuarioLogado, veiculoId: negociacao?.veiculo.id })
     }
 
     function confirmarCancelamento() {
@@ -168,7 +248,7 @@ function DetalhesNegociacao({ route, navigation }: any) {
         await api.get(`cargas/${negociacao?.cargaId}/negociacoes/${negociacao?.id}`)
             .then(response => {
                 let negociacao = response.data;
-                navigate('DetalhesNegociacao', { negociacao, tipoCarga: negociacao.tipoCarga, usuarioLogado });
+                navigate('DetalhesNegociacao', { negociacao, carga, usuarioLogado });
             }).catch(error => {
                 setErroApi(JSON.stringify(error.response.data));
                 toggleOverlay();
@@ -184,7 +264,7 @@ function DetalhesNegociacao({ route, navigation }: any) {
             <View style={styles.detalhes}>
                 <Text style={styles.label}>Carga:
                     <Text style={[styles.label, styles.labelContent]}>
-                        {' ' + tipoCarga}
+                        {' ' + carga.tipoCarga}
                     </Text>
                 </Text>
 
@@ -227,9 +307,11 @@ function DetalhesNegociacao({ route, navigation }: any) {
                                 </ListItem.Title>
                                 <ListItem.Subtitle>
                                     <Text style={styles.subtitle}>
+                                        Data para retirada: {format(new Date(proposta.dataRetirada.toString()), "dd/MM/yyyy") + `\n`}
+                                        Data para entrega: {format(new Date(proposta.dataEntrega.toString()), "dd/MM/yyyy") + `\n`}
                                         Valor proposto: R${proposta.valor.toFixed(2).replace('.', ',') + `\n`}
                                         Justificativa: {proposta.justificativa + `\n`}
-                                        Status: {proposta.aceita == true ? 'ACEITA' : proposta.aceita == false ? 'NÃO ACEITA' : 'SEM RESPOSTA'}
+                                        Status: {proposta.aceita == true ? 'ACEITA' : proposta.aceita == false ? 'NÃO ACEITA' : 'SEM RESPOSTA' + `\n`}
                                     </Text>
                                 </ListItem.Subtitle>
                                 <ListItem.ButtonGroup
@@ -237,7 +319,7 @@ function DetalhesNegociacao({ route, navigation }: any) {
                                         'Aceitar', 'Contrapropor'
                                     ]}
                                     onPress={(botaoIndex) => {
-                                        botaoIndex == 0 ? confirmarAceitacao(proposta) : contrapropor()
+                                        botaoIndex == 0 ? confirmarAceitacao(proposta) : contrapropor(proposta)
                                     }}
                                     containerStyle={styles.listButtonsContainer}
                                     buttonStyle={[styles.buttonList, proposta.aceita == true ? styles.listItemAceito : proposta.aceita == false && styles.listItemNaoAceito]}

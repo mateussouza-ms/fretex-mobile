@@ -71,6 +71,9 @@ function DetalhesCarga({ route, navigation }: any) {
             dataCadastro: '',
             dataRetirada: '',
             dataEntrega: '',
+            dataRetiradaPretendida: '',
+            dataEntregaPretendida: '',
+            negociaDatas: false,
             negociacoes: [
                 {
                     id: '',
@@ -216,18 +219,47 @@ function DetalhesCarga({ route, navigation }: any) {
                             {carga.dataCadastro && ' ' + format(new Date(carga.dataCadastro), "dd/MM/yyyy HH:mm:ss")}
                         </Text>
                     </Text>
-                {/*
-                    <Text style={styles.label}>Data de retirada:
-                    <Text style={[styles.label, styles.labelContent]}>
-                            {carga.dataRetirada ? ' ' + format(new Date(carga.dataRetirada), "dd/MM/yyyy HH:mm:ss") : ' Sem registro'}
+
+                    {!!carga.dataEntregaPretendida &&
+                        <Text style={styles.label}>Data de retirada pretendida:
+                            <Text style={[styles.label, styles.labelContent]}>
+                                {' ' + format(new Date(carga.dataRetiradaPretendida), "dd/MM/yyyy")}
+                            </Text>
                         </Text>
-                    </Text>
-                    <Text style={styles.label}>Data de entrega:
-                    <Text style={[styles.label, styles.labelContent]}>
-                            {carga.dataEntrega ? ' ' + format(new Date(carga.dataEntrega), "dd/MM/yyyy HH:mm:ss") : ' Sem registro'}
+                    }
+
+                    {!!carga.dataEntregaPretendida &&
+                        <Text style={styles.label}>Data de entrega pretendida:
+                            <Text style={[styles.label, styles.labelContent]}>
+                                {' ' + format(new Date(carga.dataEntregaPretendida), "dd/MM/yyyy")}
+                            </Text>
                         </Text>
+                    }
+
+                    {(!!carga.dataEntregaPretendida || !!carga.dataEntregaPretendida) &&
+                        <Text style={styles.label}>Aceita negociação de datas:
+                            <Text style={[styles.label, styles.labelContent]}>
+                                {carga.negociaDatas ? ' SIM' : ' NÃO'}
+                            </Text>
                     </Text>
-                */}
+                    }
+
+                    {!!carga.dataRetirada &&
+                        <Text style={styles.label}>Data de retirada:
+                            <Text style={[styles.label, styles.labelContent]}>
+                                {format(new Date(carga.dataRetirada), "dd/MM/yyyy HH:mm:ss")}
+                            </Text>
+                        </Text>
+                    }
+
+                    {!!carga.dataEntrega &&
+                        <Text style={styles.label}>Data de entrega:
+                            <Text style={[styles.label, styles.labelContent]}>
+                                {format(new Date(carga.dataEntrega), "dd/MM/yyyy HH:mm:ss")}
+                            </Text>
+                        </Text>
+                    }
+
                 </View>
 
 
@@ -237,7 +269,7 @@ function DetalhesCarga({ route, navigation }: any) {
                         <ListItem
                             key={negociacao.id}
                             onPress={() => {
-                                navigate('DetalhesNegociacao', { negociacao, tipoCarga: carga.tipoCarga, usuarioLogado });
+                                navigate('DetalhesNegociacao', { negociacao, carga, usuarioLogado });
                             }}
                             bottomDivider
                         >
@@ -277,7 +309,7 @@ function DetalhesCarga({ route, navigation }: any) {
                 {usuarioLogado?.perfilSelecionado == 'PRESTADOR_SERVICOS' && carga.negociacoes.length == 0 &&
                     <TouchableOpacity
                         style={styles.link}
-                        onPress={() => navigate('CadastroProposta', { cargaId: carga.id, novaNegociacao: true, usuarioLogado, veiculoId: veiculo?.id })}
+                        onPress={() => navigate('CadastroProposta', { carga, novaNegociacao: true, usuarioLogado, veiculoId: veiculo?.id })}
                     >
                         <Text style={styles.textPlus}>+ </Text>
                         <Text style={styles.textoLink}>Fazer uma proposta</Text>

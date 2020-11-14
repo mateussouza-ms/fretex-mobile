@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { View, ScrollView, Text, TextInput, Image } from 'react-native';
 import { RectButton, TouchableOpacity } from 'react-native-gesture-handler';
-import { Overlay } from 'react-native-elements';
+import { CheckBox, Overlay } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import { Picker } from '@react-native-community/picker';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 import PageHeader from '../../components/PageHeader';
 
@@ -17,6 +18,7 @@ import apiCorreios from '../../services/apiCorreios';
 
 import styles from './styles';
 import { useAuth } from '../../contexts/auth';
+import { format } from 'date-fns';
 import { parse } from 'fast-xml-parser';
 import Loader from '../../components/Loader';
 
@@ -51,10 +53,15 @@ interface respostaWsCorreios {
 function SolicitacaoFrete() {
     const { navigate } = useNavigation();
     const [loading, setLoading] = useState(false);
+    const [showDatePickerRetirada, setShowDatePickerRetirada] = useState(false);
+    const [showDatePickerEntrega, setShowDatePickerEntrega] = useState(false);
+    const [negociaDatas, setNegociaDatas] = useState(true);
 
     const [tipoCarga, setTipoCarga] = useState('');
     const [peso, setPeso] = useState('');
     const [observacoes, setObservacoes] = useState('');
+    const [dataRetiradaPretendida, setDataRetiradaPretendida] = useState<Date | null>(null);
+    const [dataEntregaPretendida, setDataEntregaPretendida] = useState<Date | null>(null);
 
     const [enderecoRetiradaCep, setEnderecoRetiradaCep] = useState('');
     const [enderecoRetiradaLogradouro, setEnderecoRetiradaLogradouro] = useState('');
@@ -204,7 +211,6 @@ function SolicitacaoFrete() {
             setEnderecoRetiradaCidade(value);
         }
     }
-
     function handleChangeValueEnderecoEntregaCidade(value: Cidade) {
         if (value) {
             setEnderecoEntregaCidade(value);
@@ -260,6 +266,9 @@ function SolicitacaoFrete() {
                     }
                 },
                 observacoes,
+                dataRetiradaPretendida,
+                dataEntregaPretendida,
+                negociaDatas,
             })
             .then(response => {
                 console.log(response.data);
@@ -398,6 +407,81 @@ function SolicitacaoFrete() {
                     maxLength={120}
                 />
 
+                <Text style={styles.label}>Data pretendida para retirada:</Text>
+                <TextInput
+                    style={
+                        [
+                            styles.input,
+                        ]
+                    }
+                    value={dataRetiradaPretendida
+                        ? format(new Date(dataRetiradaPretendida.toString()), "dd/MM/yyyy")
+                        : ''
+                    }
+                    placeholder="Data pretendida para a carga ser retirada"
+                    onTouchEnd={() => setShowDatePickerRetirada(true)}
+                />
+
+                {showDatePickerRetirada &&
+                    <DateTimePicker
+                        value={dataRetiradaPretendida ? dataRetiradaPretendida : new Date()}
+                        mode='date'
+                        display='default'
+                        onChange={(event, date) => {
+                            setShowDatePickerRetirada(false);
+                            if (event.type == 'set') {
+                                if (date) {
+                                    if (dataEntregaPretendida && dataRetiradaPretendida && dataEntregaPretendida < date) {
+                                        const diferenca = dataEntregaPretendida.getTime() - dataRetiradaPretendida.getTime();
+                                        setDataEntregaPretendida(new Date(date.getTime() + diferenca));
+                                    }
+                                    setDataRetiradaPretendida(date);
+                                }
+                            }
+                        }}
+                        minimumDate={new Date()}
+                    />
+                }
+
+                <Text style={styles.label}>Data pretendida para entrega:</Text>
+                <TextInput
+                    style={
+                        [
+                            styles.input,
+                        ]
+                    }
+                    value={dataEntregaPretendida
+                        ? format(new Date(dataEntregaPretendida.toString()), "dd/MM/yyyy")
+                        : ''
+                    }
+                    placeholder="Data pretendida para a carga ser entregue"
+                    onTouchEnd={() => setShowDatePickerEntrega(true)}
+                />
+
+                {showDatePickerEntrega &&
+                    <DateTimePicker
+                        value={dataEntregaPretendida ? dataEntregaPretendida : new Date()}
+                        mode='date'
+                        display='default'
+                        onChange={(event, date) => {
+                            setShowDatePickerEntrega(false);
+                            if (event.type == 'set') {
+                                setDataEntregaPretendida(date ? date : new Date());
+                            }
+                        }}
+                        minimumDate={dataRetiradaPretendida ? dataRetiradaPretendida : new Date()}
+                    />
+                }
+
+                {(dataRetiradaPretendida || dataEntregaPretendida) &&
+                    <CheckBox
+                        containerStyle={styles.checkboxContainer}
+                        textStyle={styles.checkboxText}
+                        title='Permitir que o transportador sugira datas diferentes'
+                        checked={negociaDatas}
+                        onPress={() => setNegociaDatas(!negociaDatas)}
+                    />
+                }
                 <Text style={styles.label}>Endereços:</Text>
                 <View style={styles.enderecoContainer}>
                     <TouchableOpacity style={styles.labelEnderecoContainer} onPress={handleToggleEnderecoRetiradaVisible}>

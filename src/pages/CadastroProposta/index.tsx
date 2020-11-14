@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { View, ScrollView, Text, TextInput } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
-import { useNavigation } from '@react-navigation/native';
+import { createNavigatorFactory, useNavigation } from '@react-navigation/native';
 import { Overlay } from 'react-native-elements';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { format } from 'date-fns';
 
 import PageHeader from '../../components/PageHeader';
 
@@ -16,11 +18,16 @@ import { useAuth } from '../../contexts/auth';
 
 function CadastroProposta({ route, navigation }: any) {
     const { usuarioLogado } = useAuth();
-    const { cargaId, negociacaoId, novaNegociacao, veiculoId } = route.params;
+    const { carga, negociacaoId, novaNegociacao, veiculoId } = route.params;
     const { navigate } = useNavigation();
+    
 
     const [loading, setLoading] = useState(false);
+    const [showDatePickerRetirada, setShowDatePickerRetirada] = useState(false);
+    const [showDatePickerEntrega, setShowDatePickerEntrega] = useState(false);
 
+    const [dataRetirada, setDataRetirada] = useState<Date | null>(new Date(carga.dataRetiradaPretendida));
+    const [dataEntrega, setDataEntrega] = useState<Date | null>(new Date(carga.dataEntregaPretendida));
     const [valor, setValor] = useState('');
     const [justificativa, setJustificativa] = useState('');
     const [usuarioResponsavel, setUsuarioResponsavel] = useState({ id: '' });
@@ -62,10 +69,12 @@ function CadastroProposta({ route, navigation }: any) {
     async function abrirNegociacao() {
         setLoading(true);
         await api.post(
-            `cargas/${cargaId}/negociacoes`,
+            `cargas/${carga.id}/negociacoes`,
             {
                 veiculoId: veiculoId,
                 proposta: {
+                    dataRetirada,
+                    dataEntrega,
                     valor,
                     justificativa,
                     usuarioResponsavel: {
@@ -86,8 +95,10 @@ function CadastroProposta({ route, navigation }: any) {
     async function adicionarContraproposta() {
         setLoading(true);
         await api.post(
-            `cargas/${cargaId}/negociacoes/${negociacaoId}/propostas`,
+            `cargas/${carga.id}/negociacoes/${negociacaoId}/propostas`,
             {
+                dataRetirada,
+                dataEntrega,
                 valor,
                 justificativa,
                 usuarioResponsavel: {
@@ -112,6 +123,75 @@ function CadastroProposta({ route, navigation }: any) {
             <PageHeader title="Proposta" />
 
             <ScrollView style={styles.scrollCampos}>
+
+                <Text style={styles.label}>Data de retirada:</Text>
+                <TextInput
+                    style={
+                        [
+                            styles.input,
+                        ]
+                    }
+                    value={dataRetirada
+                        ? format(new Date(dataRetirada.toString()), "dd/MM/yyyy")
+                        : ''
+                    }
+                    placeholder="Data para a carga ser retirada"
+                    onTouchEnd={() => setShowDatePickerRetirada(true)}
+                    editable={carga.negociaDatas}
+                />
+
+                {showDatePickerRetirada &&
+                    <DateTimePicker
+                        value={dataRetirada ? dataRetirada : new Date()}
+                        mode='date'
+                        display='default'
+                        onChange={(event, date) => {
+                            setShowDatePickerRetirada(false);
+                            if (event.type == 'set') {
+                                if (date) {
+                                    if (dataEntrega && dataRetirada && dataEntrega < date) {
+                                        const diferenca = dataEntrega.getTime() - dataRetirada.getTime();
+                                        setDataEntrega(new Date(date.getTime() + diferenca));
+                                    }
+                                    setDataRetirada(date);
+                                }
+                            }
+                        }}
+                        minimumDate={new Date()}
+                    />
+                }
+
+                <Text style={styles.label}>Data de entrega:</Text>
+                <TextInput
+                    style={
+                        [
+                            styles.input,
+                        ]
+                    }
+                    value={dataEntrega
+                        ? format(new Date(dataEntrega.toString()), "dd/MM/yyyy")
+                        : ''
+                    }
+                    placeholder="Data para a carga ser entregue"
+                    onTouchEnd={() => setShowDatePickerEntrega(true)}
+                    editable={carga.negociaDatas}
+                />
+
+                {showDatePickerEntrega &&
+                    <DateTimePicker
+                        value={dataEntrega ? dataEntrega : new Date()}
+                        mode='date'
+                        display='default'
+                        onChange={(event, date) => {
+                            setShowDatePickerEntrega(false);
+                            if (event.type == 'set') {
+                                setDataEntrega(date ? date : new Date());
+                            }
+                        }}
+                        minimumDate={dataRetirada ? dataRetirada : new Date()}
+                    />
+                }
+
                 <Text style={styles.label}>Valor:
                 {formSubmetido
                         && errors.valor
