@@ -13,9 +13,12 @@ import iconeSetaCima from '../../assets/images/icons/icone-seta-cima.png';
 import iconeSetaBaixo from '../../assets/images/icons/icone-seta-baixo.png';
 
 import api from '../../services/api';
+import apiCorreios from '../../services/apiCorreios';
 
 import styles from './styles';
 import { useAuth } from '../../contexts/auth';
+import { parse } from 'fast-xml-parser';
+import Loader from '../../components/Loader';
 
 interface UF {
     sigla: string,
@@ -28,9 +31,26 @@ interface Cidade {
     uf: string,
 }
 
+interface respostaWsCorreios {
+    "soap:Envelope": {
+        "soap:Body": {
+            "ns2:consultaCEPResponse": {
+                "return": {
+                    "bairro": string,
+                    "cep": string,
+                    "cidade": string,
+                    "complemento2": string,
+                    "end": string,
+                    "uf": string
+                }
+            }
+        }
+    }
+}
+
 function SolicitacaoFrete() {
     const { navigate } = useNavigation();
-    const { usuarioLogado } = useAuth();
+    const [loading, setLoading] = useState(false);
 
     const [tipoCarga, setTipoCarga] = useState('');
     const [peso, setPeso] = useState('');
@@ -42,7 +62,7 @@ function SolicitacaoFrete() {
     const [enderecoRetiradaBairro, setEnderecoRetiradaBairro] = useState('');
     const [enderecoRetiradaComplemento, setEnderecoRetiradaComplemento] = useState('');
     const [enderecoRetiradaUf, setEnderecoRetiradaUf] = useState({});
-    const [enderecoRetiradaCidade, setEnderecoRetiradaCidade] = useState({
+    const [enderecoRetiradaCidade, setEnderecoRetiradaCidade] = useState<Cidade>({
         id: 0,
         nome: '',
         uf: '',
@@ -54,7 +74,7 @@ function SolicitacaoFrete() {
     const [enderecoEntregaBairro, setEnderecoEntregaBairro] = useState('');
     const [enderecoEntregaComplemento, setEnderecoEntregaComplemento] = useState('');
     const [enderecoEntregaUf, setEnderecoEntregaUf] = useState({});
-    const [enderecoEntregaCidade, setEnderecoEntregaCidade] = useState({
+    const [enderecoEntregaCidade, setEnderecoEntregaCidade] = useState<Cidade>({
         id: 0,
         nome: '',
         uf: '',
@@ -66,8 +86,8 @@ function SolicitacaoFrete() {
     const [isEnderecoRetiradaVisible, setIsEnderecoRetiradaVisible] = useState(false);
     const [isEnderecoEntregaVisible, setIsEnderecoEntregaVisible] = useState(false);
     const [estados, setEstados] = useState([]);
-    const [cidadesEnderecoRetirada, setCidadesEnderecoRetirada] = useState([]);
-    const [cidadesEnderecoEntrega, setCidadesEnderecoEntrega] = useState([]);
+    const [cidadesEnderecoRetirada, setCidadesEnderecoRetirada] = useState<Cidade[]>([]);
+    const [cidadesEnderecoEntrega, setCidadesEnderecoEntrega] = useState<Cidade[]>([]);
 
 
     const errors = {
@@ -134,7 +154,7 @@ function SolicitacaoFrete() {
         }
     }, []);
 
-    function handleChangeValueEnderecoRetiradaUf(value: UF) {
+    function handleChangeValueEnderecoRetiradaUf(value: UF, cidadeSelecionada?: string) {
         if (value.sigla) {
             setEnderecoRetiradaUf(value);
 
@@ -143,12 +163,20 @@ function SolicitacaoFrete() {
                     uf: value.sigla
                 }
             }).then(response => {
-                setCidadesEnderecoRetirada(response.data);
+                const cidades: Cidade[] = response.data;
+                setCidadesEnderecoRetirada(cidades);
+                if (cidadeSelecionada) {
+                    cidades.forEach(cidade => {
+                        if (cidade.nome == cidadeSelecionada) {
+                            setEnderecoRetiradaCidade(cidade);
+                        }
+                    });
+                }
             });
         }
     }
 
-    function handleChangeValueEnderecoEntregaUf(value: UF) {
+    function handleChangeValueEnderecoEntregaUf(value: UF, cidadeSelecionada?: string) {
         if (value.sigla) {
             setEnderecoEntregaUf(value);
 
@@ -158,6 +186,15 @@ function SolicitacaoFrete() {
                 }
             }).then(response => {
                 setCidadesEnderecoEntrega(response.data);
+                const cidades: Cidade[] = response.data;
+                setCidadesEnderecoEntrega(cidades);
+                if (cidadeSelecionada) {
+                    cidades.forEach(cidade => {
+                        if (cidade.nome == cidadeSelecionada) {
+                            setEnderecoEntregaCidade(cidade);
+                        }
+                    });
+                }
             });
         }
     }
@@ -167,7 +204,8 @@ function SolicitacaoFrete() {
             setEnderecoRetiradaCidade(value);
         }
     }
-    function handleChangeValueEnderecoEntegaCidade(value: Cidade) {
+
+    function handleChangeValueEnderecoEntregaCidade(value: Cidade) {
         if (value) {
             setEnderecoEntregaCidade(value);
         }
@@ -193,6 +231,7 @@ function SolicitacaoFrete() {
             return;
         }
 
+        setLoading(true);
         await api
             .post('cargas', {
                 cliente: {
@@ -228,10 +267,76 @@ function SolicitacaoFrete() {
             }).catch(error => {
                 setErroApi(JSON.stringify(error.response.data));
                 toggleOverlay();
-            });
+            }).finally(() => setLoading(false));
     }
 
 
+    function buscaCep(cep: string, endereco: string) {
+        if (cep.length != 8) {
+            return;
+        }
+
+        let xml = '\
+            <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cli="http://cliente.bean.master.sigep.bsb.correios.com.br/">\
+                <soapenv:Header/>\
+                <soapenv:Body>\
+                    <cli:consultaCEP>\
+                        <cep>'+ cep + '</cep>\
+                    </cli:consultaCEP>\
+                </soapenv:Body>\
+            </soapenv:Envelope>';
+
+        setLoading(true);
+
+        apiCorreios.post('',
+            xml,
+            {
+                headers:
+                    { 'Content-Type': 'text/xml' },
+                timeout: 3000
+
+            }).then((response) => {
+                const resposta: respostaWsCorreios = parse(response.data);
+                const { end, bairro, complemento2, cidade, uf } = resposta["soap:Envelope"]["soap:Body"]["ns2:consultaCEPResponse"].return;
+                if (endereco == 'enderecoRetirada') {
+                    setEnderecoRetiradaLogradouro(end);
+                    setEnderecoRetiradaBairro(bairro);
+                    setEnderecoRetiradaComplemento(complemento2);
+
+                    estados.map((estado: UF) => {
+                        if (estado.sigla == uf) {
+                            handleChangeValueEnderecoRetiradaUf(estado, cidade);
+                        }
+                    });
+
+                    cidadesEnderecoRetirada.map((cidadeLista: Cidade) => {
+                        if (cidadeLista.nome == cidade) {
+                            handleChangeValueEnderecoRetiradaCidade(cidadeLista);
+                        }
+                    });
+                }
+
+                if (endereco == 'enderecoEntrega') {
+                    setEnderecoEntregaLogradouro(end);
+                    setEnderecoEntregaBairro(bairro);
+                    setEnderecoEntregaComplemento(complemento2);
+
+                    estados.map((estado: UF) => {
+                        if (estado.sigla == uf) {
+                            handleChangeValueEnderecoEntregaUf(estado, cidade);
+                        }
+                    });
+
+                    cidadesEnderecoEntrega.map((cidadeLista: Cidade) => {
+                        if (cidadeLista.nome == cidade) {
+                            handleChangeValueEnderecoEntregaCidade(cidadeLista);
+                        }
+                    });
+                }
+
+                setLoading(false);
+            }).catch(() => setLoading(false));
+    }
 
     return (
         <View style={styles.container}>
@@ -293,7 +398,6 @@ function SolicitacaoFrete() {
                     maxLength={120}
                 />
 
-
                 <Text style={styles.label}>Endereços:</Text>
                 <View style={styles.enderecoContainer}>
                     <TouchableOpacity style={styles.labelEnderecoContainer} onPress={handleToggleEnderecoRetiradaVisible}>
@@ -320,6 +424,7 @@ function SolicitacaoFrete() {
                                 placeholder="CEP"
                                 keyboardType="numeric"
                                 maxLength={8}
+                                onBlur={() => buscaCep(enderecoRetiradaCep, 'enderecoRetirada')}
                             />
 
 
@@ -355,7 +460,7 @@ function SolicitacaoFrete() {
                                 value={enderecoRetiradaNumero}
                                 onChangeText={(enderecoRetiradaNumero) => setEnderecoRetiradaNumero(enderecoRetiradaNumero)}
                                 placeholder="Número"
-                                maxLength={20}                            
+                                maxLength={20}
                             />
 
 
@@ -460,6 +565,7 @@ function SolicitacaoFrete() {
                                 placeholder="CEP"
                                 keyboardType="numeric"
                                 maxLength={8}
+                                onBlur={() => buscaCep(enderecoEntregaCep, 'enderecoEntrega')}
                             />
 
 
@@ -557,7 +663,7 @@ function SolicitacaoFrete() {
                                     <Picker
                                         enabled={(Object.entries(enderecoEntregaUf).length > 0)}
                                         selectedValue={JSON.stringify(enderecoEntregaCidade)}
-                                        onValueChange={(value) => handleChangeValueEnderecoEntegaCidade(JSON.parse(value.toString() || '{}'))}
+                                        onValueChange={(value) => handleChangeValueEnderecoEntregaCidade(JSON.parse(value.toString() || '{}'))}
                                     >
                                         <Picker.Item value="" key="" label={'Cidade'} color={(Object.entries(enderecoEntregaUf).length == 0) ? '#000000a8' : ''} />
                                         {cidadesEnderecoEntrega.map((cidade: Cidade) =>
@@ -579,6 +685,8 @@ function SolicitacaoFrete() {
                 >
                     <Text style={styles.buttonText}>Salvar</Text>
                 </RectButton>
+
+                <Loader loading={loading} />
 
                 <Overlay overlayStyle={{ width: "90%" }} isVisible={visible} onBackdropPress={toggleOverlay}>
                     <Text style={{ lineHeight: 20 }}>
