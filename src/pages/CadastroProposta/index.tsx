@@ -39,11 +39,11 @@ function CadastroProposta({ route, navigation }: any) {
 
     const errors = {
         valor: obrigatorio(valor) || min(valor, 0),
-        justificativa: obrigatorio(justificativa) || max(justificativa, 120),
+        justificativa: max(justificativa, 120),
         usuarioResponsavel: obrigatorio(usuarioResponsavel),
     };
 
-    const formPreenchido = (valor != '' && justificativa != '');
+    const formPreenchido = (dataRetirada != null && dataEntrega != null && valor != '');
     const formValido = (!errors.valor && !errors.justificativa);
 
 
@@ -124,7 +124,7 @@ function CadastroProposta({ route, navigation }: any) {
 
             <ScrollView style={styles.scrollCampos}>
 
-                <Text style={styles.label}>Data de retirada:</Text>
+                <Text style={styles.label}>Data de retirada: *</Text>
                 <TextInput
                     style={
                         [
@@ -161,7 +161,7 @@ function CadastroProposta({ route, navigation }: any) {
                     />
                 }
 
-                <Text style={styles.label}>Data de entrega:</Text>
+                <Text style={styles.label}>Data de entrega: *</Text>
                 <TextInput
                     style={
                         [
@@ -192,7 +192,7 @@ function CadastroProposta({ route, navigation }: any) {
                     />
                 }
 
-                <Text style={styles.label}>Valor:
+                <Text style={styles.label}>Valor: *
                 {formSubmetido
                         && errors.valor
                         && <Text style={styles.textoValidacao}>{`\b${errors.valor}`}</Text>}

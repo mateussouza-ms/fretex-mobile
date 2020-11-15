@@ -95,7 +95,7 @@ function CadastroUsuario() {
 
             <ScrollView style={styles.scrollCampos}>
 
-                <Text style={styles.label}>Nome completo:
+                <Text style={styles.label}>Nome completo: *
                 {formSubmetido
                         && errors.nome
                         && <Text style={styles.textoValidacao}>{`\b${errors.nome}`}</Text>}
@@ -114,7 +114,7 @@ function CadastroUsuario() {
                 />
 
 
-                <Text style={styles.label}>CPF/CNPJ:
+                <Text style={styles.label}>CPF/CNPJ: *
                {formSubmetido
                         && errors.cnp
                         && <Text style={styles.textoValidacao}>{`\b${errors.cnp}`}</Text>}
@@ -133,7 +133,7 @@ function CadastroUsuario() {
                     maxLength={14}
                 />
 
-                <Text style={styles.label}>E-mail:
+                <Text style={styles.label}>E-mail: *
                {formSubmetido
                         && errors.email
                         && <Text style={styles.textoValidacao}>{`\b${errors.email}`}</Text>}
@@ -151,7 +151,7 @@ function CadastroUsuario() {
                     keyboardType="email-address"
                 />
 
-                <Text style={styles.label}>Telefone:
+                <Text style={styles.label}>Telefone: *
                {formSubmetido
                         && errors.telefoneDdd
                         && <Text style={styles.textoValidacao}>{` DDD ${errors.telefoneDdd}`}</Text>}
@@ -197,7 +197,7 @@ function CadastroUsuario() {
                     </View>
                 </View>
 
-                <Text style={styles.label}>Senha:
+                <Text style={styles.label}>Senha: *
                {formSubmetido
                         && errors.senha
                         && <Text style={styles.textoValidacao}>{`\b${errors.senha}`}</Text>}

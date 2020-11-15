@@ -74,7 +74,7 @@ function InformacaoRetirada({ route, navigation }: any) {
 
             <ScrollView style={styles.scrollCampos}>
 
-                <Text style={styles.label}>Data de retirada: </Text>
+                <Text style={styles.label}>Data de retirada: *</Text>
                 <TextInput
                     style={
                         [

@@ -133,7 +133,7 @@ function AtualizacaoCadastro() {
 
             <ScrollView style={styles.scrollCampos}>
 
-                <Text style={styles.label}>Nome completo:
+                <Text style={styles.label}>Nome completo: *
                 {formSubmetido
                         && errors.nome
                         && <Text style={styles.textoValidacao}>{`\b${errors.nome}`}</Text>}
@@ -152,7 +152,7 @@ function AtualizacaoCadastro() {
                 />
 
 
-                <Text style={styles.label}>CPF/CNPJ:
+                <Text style={styles.label}>CPF/CNPJ: *
                {formSubmetido
                         && errors.cnp
                         && <Text style={styles.textoValidacao}>{`\b${errors.cnp}`}</Text>}
@@ -171,7 +171,7 @@ function AtualizacaoCadastro() {
                     maxLength={14}
                 />
 
-                <Text style={styles.label}>E-mail:
+                <Text style={styles.label}>E-mail: *
                {formSubmetido
                         && errors.email
                         && <Text style={styles.textoValidacao}>{`\b${errors.email}`}</Text>}
@@ -189,7 +189,7 @@ function AtualizacaoCadastro() {
                     keyboardType="email-address"
                 />
 
-                <Text style={styles.label}>Telefone:
+                <Text style={styles.label}>Telefone: *
                {formSubmetido
                         && errors.telefoneDdd
                         && <Text style={styles.textoValidacao}>{` DDD ${errors.telefoneDdd}`}</Text>}

@@ -86,7 +86,7 @@ function RecuperacaoSenha() {
             <Text style={styles.title}>
                 <Text>Para recuperar sua senha, informe abaixo o e-mail cadastrado.</Text>
             </Text>
-            <Text style={styles.label}>E-mail:
+            <Text style={styles.label}>E-mail: *
                {formSubmetido
                     && errors.email
                     && <Text style={styles.textoValidacao}>{`\b${errors.email}`}</Text>}

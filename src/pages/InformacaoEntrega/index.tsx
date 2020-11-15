@@ -75,7 +75,7 @@ function InformacaoEntrega({ route, navigation }: any) {
 
             <ScrollView style={styles.scrollCampos}>
 
-                <Text style={styles.label}>Data de entrega: </Text>
+                <Text style={styles.label}>Data de entrega: *</Text>
                 <TextInput
                     style={
                         [

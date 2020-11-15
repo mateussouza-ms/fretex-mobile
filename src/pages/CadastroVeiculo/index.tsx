@@ -145,7 +145,7 @@ const CadastroVeiculo: React.FC = () => {
 
             {novoPrestador && (<Text style={styles.title}>Para se cadastrar como prestador de serviços, informe abaixo os dados do seu veículo:</Text>)}
             <ScrollView style={styles.scrollCampos}>
-                <Text style={styles.label}>Tipo de veículo:
+                <Text style={styles.label}>Tipo de veículo: *
                 {formSubmetido
                         && errors.nome
                         && <Text style={styles.textoValidacao}>{`\b${errors.nome}`}</Text>}
@@ -184,7 +184,7 @@ const CadastroVeiculo: React.FC = () => {
                     />
                 }
 
-                <Text style={styles.label}>Placa:
+                <Text style={styles.label}>Placa: *
                 {formSubmetido
                         && errors.placa
                         && <Text style={styles.textoValidacao}>{`\b${errors.placa}`}</Text>}
@@ -203,7 +203,7 @@ const CadastroVeiculo: React.FC = () => {
                     maxLength={7}
                 />
 
-                <Text style={styles.label}>Peso máximo de carga:
+                <Text style={styles.label}>Peso máximo de carga: *
                 {formSubmetido
                         && errors.pesoMaximo
                         && <Text style={styles.textoValidacao}>{`\b${errors.pesoMaximo}`}</Text>}

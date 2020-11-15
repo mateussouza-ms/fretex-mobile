@@ -353,7 +353,7 @@ function SolicitacaoFrete() {
 
             <ScrollView style={styles.scrollCampos}>
 
-                <Text style={styles.label}>Carga a ser transportada:
+                <Text style={styles.label}>Carga a ser transportada: *
                 {formSubmetido
                         && errors.tipoCarga
                         && <Text style={styles.textoValidacao}>{`\b${errors.tipoCarga}`}</Text>}
@@ -371,7 +371,7 @@ function SolicitacaoFrete() {
                     maxLength={50}
                 />
 
-                <Text style={styles.label}>Peso:
+                <Text style={styles.label}>Peso: *
                 {formSubmetido
                         && errors.peso
                         && <Text style={styles.textoValidacao}>{`\b${errors.peso}`}</Text>}
@@ -485,7 +485,7 @@ function SolicitacaoFrete() {
                 <Text style={styles.label}>Endereços:</Text>
                 <View style={styles.enderecoContainer}>
                     <TouchableOpacity style={styles.labelEnderecoContainer} onPress={handleToggleEnderecoRetiradaVisible}>
-                        <Text style={[styles.label, styles.labelEndereco,]}> Endereço de partida</Text>
+                        <Text style={[styles.label, styles.labelEndereco,]}> Endereço de partida *</Text>
 
                         {isEnderecoRetiradaVisible && <Image style={[styles.setaCollapse]} source={iconeSetaCima} resizeMode="center" />}
                         {!isEnderecoRetiradaVisible && <Image style={styles.setaCollapse} source={iconeSetaBaixo} resizeMode="center" />}
@@ -505,7 +505,7 @@ function SolicitacaoFrete() {
                                 }
                                 value={enderecoRetiradaCep}
                                 onChangeText={(enderecoRetiradaCep) => setEnderecoRetiradaCep(enderecoRetiradaCep)}
-                                placeholder="CEP"
+                                placeholder="CEP *"
                                 keyboardType="numeric"
                                 maxLength={8}
                                 onBlur={() => buscaCep(enderecoRetiradaCep, 'enderecoRetirada')}
@@ -525,7 +525,7 @@ function SolicitacaoFrete() {
                                 }
                                 value={enderecoRetiradaLogradouro}
                                 onChangeText={(enderecoRetiradaLogradouro) => setEnderecoRetiradaLogradouro(enderecoRetiradaLogradouro)}
-                                placeholder="Logradouro"
+                                placeholder="Logradouro *"
                                 maxLength={120}
                             />
 
@@ -543,7 +543,7 @@ function SolicitacaoFrete() {
                                 }
                                 value={enderecoRetiradaNumero}
                                 onChangeText={(enderecoRetiradaNumero) => setEnderecoRetiradaNumero(enderecoRetiradaNumero)}
-                                placeholder="Número"
+                                placeholder="Número *"
                                 maxLength={20}
                             />
 
@@ -561,7 +561,7 @@ function SolicitacaoFrete() {
                                 }
                                 value={enderecoRetiradaBairro}
                                 onChangeText={(enderecoRetiradaBairro) => setEnderecoRetiradaBairro(enderecoRetiradaBairro)}
-                                placeholder="Bairro"
+                                placeholder="Bairro *"
                                 maxLength={50}
                             />
 
@@ -592,7 +592,7 @@ function SolicitacaoFrete() {
                                         selectedValue={JSON.stringify(enderecoRetiradaUf)}
                                         onValueChange={(value) => handleChangeValueEnderecoRetiradaUf(JSON.parse(value.toString() || '{}'))}
                                     >
-                                        <Picker.Item value="" key="" label={'UF'} />
+                                        <Picker.Item value="" key="" label={'UF *'} />
                                         {estados.map((estado: UF) =>
                                             <Picker.Item key={estado.sigla} label={estado.nome} value={JSON.stringify(estado)} />
                                         )}
@@ -609,7 +609,7 @@ function SolicitacaoFrete() {
                                         selectedValue={JSON.stringify(enderecoRetiradaCidade)}
                                         onValueChange={(value) => handleChangeValueEnderecoRetiradaCidade(JSON.parse(value.toString() || '{}'))}
                                     >
-                                        <Picker.Item value="" key="" label={'Cidade'} color={(Object.entries(enderecoRetiradaUf).length == 0) ? '#000000a8' : ''} />
+                                        <Picker.Item value="" key="" label={'Cidade *'} color={(Object.entries(enderecoRetiradaUf).length == 0) ? '#000000a8' : ''} />
                                         {cidadesEnderecoRetirada.map((cidade: Cidade) =>
                                             <Picker.Item key={cidade.id} label={cidade.nome} value={JSON.stringify(cidade)} />
                                         )}
@@ -624,7 +624,7 @@ function SolicitacaoFrete() {
 
                 <View style={styles.enderecoContainer}>
                     <TouchableOpacity style={styles.labelEnderecoContainer} onPress={handleToggleEnderecoEntregaVisible}>
-                        <Text style={[styles.label, styles.labelEndereco,]}> Endereço de entrega</Text>
+                        <Text style={[styles.label, styles.labelEndereco,]}> Endereço de entrega *</Text>
 
                         {isEnderecoEntregaVisible && <Image style={styles.setaCollapse} source={iconeSetaCima} resizeMode="center" />}
                         {!isEnderecoEntregaVisible && <Image style={styles.setaCollapse} source={iconeSetaBaixo} resizeMode="center" />}
@@ -646,7 +646,7 @@ function SolicitacaoFrete() {
                                 }
                                 value={enderecoEntregaCep}
                                 onChangeText={(enderecoEntregaCep) => setEnderecoEntregaCep(enderecoEntregaCep)}
-                                placeholder="CEP"
+                                placeholder="CEP *"
                                 keyboardType="numeric"
                                 maxLength={8}
                                 onBlur={() => buscaCep(enderecoEntregaCep, 'enderecoEntrega')}
@@ -666,7 +666,7 @@ function SolicitacaoFrete() {
                                 }
                                 value={enderecoEntregaLogradouro}
                                 onChangeText={(enderecoEntregaLogradouro) => setEnderecoEntregaLogradouro(enderecoEntregaLogradouro)}
-                                placeholder="Logradouro"
+                                placeholder="Logradouro *"
                                 maxLength={120}
                             />
 
@@ -684,7 +684,7 @@ function SolicitacaoFrete() {
                                 }
                                 value={enderecoEntregaNumero}
                                 onChangeText={(enderecoEntregaNumero) => setEnderecoEntregaNumero(enderecoEntregaNumero)}
-                                placeholder="Número"
+                                placeholder="Número *"
                                 maxLength={20}
                             />
 
@@ -700,7 +700,7 @@ function SolicitacaoFrete() {
                                 }
                                 value={enderecoEntregaBairro}
                                 onChangeText={(enderecoEntregaBairro) => setEnderecoEntregaBairro(enderecoEntregaBairro)}
-                                placeholder="Bairro"
+                                placeholder="Bairro *"
                                 maxLength={50}
                             />
 
@@ -732,7 +732,7 @@ function SolicitacaoFrete() {
                                         selectedValue={JSON.stringify(enderecoEntregaUf)}
                                         onValueChange={(value) => handleChangeValueEnderecoEntregaUf(JSON.parse(value.toString() || '{}'))}
                                     >
-                                        <Picker.Item value="" key="" label={'UF'} />
+                                        <Picker.Item value="" key="" label={'UF *'} />
                                         {estados.map((estado: UF) =>
                                             <Picker.Item key={estado.sigla} label={estado.nome} value={JSON.stringify(estado)} />
                                         )}
@@ -749,7 +749,7 @@ function SolicitacaoFrete() {
                                         selectedValue={JSON.stringify(enderecoEntregaCidade)}
                                         onValueChange={(value) => handleChangeValueEnderecoEntregaCidade(JSON.parse(value.toString() || '{}'))}
                                     >
-                                        <Picker.Item value="" key="" label={'Cidade'} color={(Object.entries(enderecoEntregaUf).length == 0) ? '#000000a8' : ''} />
+                                        <Picker.Item value="" key="" label={'Cidade *'} color={(Object.entries(enderecoEntregaUf).length == 0) ? '#000000a8' : ''} />
                                         {cidadesEnderecoEntrega.map((cidade: Cidade) =>
                                             <Picker.Item key={cidade.id} label={cidade.nome} value={JSON.stringify(cidade)} />
                                         )}

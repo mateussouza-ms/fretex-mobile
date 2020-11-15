@@ -98,7 +98,7 @@ function AlteracaoSenha() {
             <PageHeader title="Alteração de senha" />
 
 
-            <Text style={styles.label}>Senha atual:
+            <Text style={styles.label}>Senha atual: *
                {formSubmetido
                     && errors.senhaAtual
                     && <Text style={styles.textoValidacao}>{`\b${errors.senhaAtual}`}</Text>}
@@ -120,7 +120,7 @@ function AlteracaoSenha() {
                 secureTextEntry={true}
             />
 
-            <Text style={styles.label}>Nova senha:
+            <Text style={styles.label}>Nova senha: *
                {formSubmetido
                     && errors.novaSenha
                     && <Text style={styles.textoValidacao}>{`\b${errors.novaSenha}`}</Text>}

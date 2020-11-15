@@ -88,7 +88,7 @@ function RedefinicaoSenha() {
             <Text style={styles.title}>
                 <Text>Agora, informe abaixo o código que foi enviado para o e-mail informado e a nova senha a ser cadastrada.</Text>
             </Text>
-            <Text style={styles.label}>Código de recuperação:
+            <Text style={styles.label}>Código de recuperação: *
                {formSubmetido
                     && errors.codigoRecuperacao
                     && <Text style={styles.textoValidacao}>{`\b${errors.codigoRecuperacao}`}</Text>}
@@ -107,7 +107,7 @@ function RedefinicaoSenha() {
                 maxLength={6}
             />
 
-            <Text style={styles.label}>Nova senha:
+            <Text style={styles.label}>Nova senha: *
                {formSubmetido
                     && errors.senha
                     && <Text style={styles.textoValidacao}>{`\b${errors.senha}`}</Text>}
