@@ -67,7 +67,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({ title, headerRight, children })
                         <Text style={styles.modalClose} onPress={() => setModalVisible(false)}> x </Text>
 
                         <Text style={styles.modalText}>{usuarioLogado?.nome}</Text>
-                        <Text>emaildousuario@gmail.com</Text>
+                        <Text>{usuarioLogado?.email}</Text>
 
                         <View style={styles.modalButtonsGroup}>
                             <TouchableHighlight

@@ -6,6 +6,7 @@ import api from '../services/api';
 export interface UsuarioLogado {
   id: number,
   nome: string,
+  email: string
   perfis: string[],
   perfilSelecionado: string | null,
 }
@@ -86,6 +87,7 @@ const AuthProvider: React.FC = ({ children }) => {
       var usuario = {
         id: usuarioLogado.id,
         nome: usuarioLogado.nome,
+        email: usuarioLogado.email,
         perfis: usuarioLogado.perfis,
         perfilSelecionado: perfil,
       };
@@ -99,6 +101,7 @@ const AuthProvider: React.FC = ({ children }) => {
       var usuario = {
         id: usuarioLogado.id,
         nome: usuarioLogado.nome,
+        email: usuarioLogado.email,
         perfis: [...usuarioLogado.perfis, perfil],
         perfilSelecionado: perfil,
       };

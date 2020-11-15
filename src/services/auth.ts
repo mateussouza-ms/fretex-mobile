@@ -56,7 +56,7 @@ export async function signIn(credenciais: Credenciais): Promise<Response> {
   console.log(JSON.stringify("Resposta dos dados do usuário: " + JSON.stringify(responseUserAuth.data)));
 
 
-  const { usuarioId, usuarioNome, authorities} = responseUserAuth.data;
+  const { usuarioId, usuarioNome, usuarioEmail, authorities} = responseUserAuth.data;
 
   var perfisUsuario: string[] = [];
 
@@ -70,6 +70,7 @@ export async function signIn(credenciais: Credenciais): Promise<Response> {
     usuarioLogado: {
       id: usuarioId,
       nome: usuarioNome,
+      email: usuarioEmail,
       perfis: perfisUsuario,
       perfilSelecionado: null,
     }
