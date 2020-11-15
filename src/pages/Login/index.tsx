@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, ScrollView, Text, TextInput, Image } from 'react-native';
 import { RectButton, TouchableOpacity } from 'react-native-gesture-handler';
 import { Link, useNavigation } from '@react-navigation/native';
@@ -72,6 +72,7 @@ function Login() {
                 value={email_cnp}
                 onChangeText={(email_cnp) => setEmail_cnp(email_cnp)}
                 placeholder="E-mail ou CPF/CNPJ"
+                keyboardType={email_cnp.length >1 && isNaN(parseFloat(email_cnp)) ? 'email-address' : 'visible-password'}
             />
 
             <TextInput
