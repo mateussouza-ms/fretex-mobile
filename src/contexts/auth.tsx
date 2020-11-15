@@ -28,6 +28,18 @@ const AuthProvider: React.FC = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    api.interceptors.response.use(
+      (response) => {
+        return response;
+      },
+      function (error) {
+        if (error.response.status == 401) {
+          signOut();
+        }
+        return Promise.reject(error);
+      }
+    );
+
     async function loadStorageData() {
       const storagedUser = await AsyncStorage.getItem('@Fretex:usuarioLogado');
       const storagedToken = await AsyncStorage.getItem('@Fretex:token');
