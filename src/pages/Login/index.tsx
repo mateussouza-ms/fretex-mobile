@@ -10,6 +10,7 @@ import styles from './styles';
 import landingImg from '../../assets/images/logo-fretex.png';
 import { useAuth } from '../../contexts/auth';
 import Loader from '../../components/Loader';
+import { color } from 'react-native-reanimated';
 
 function Login() {
     const { navigate } = useNavigation();
@@ -42,7 +43,7 @@ function Login() {
                 toggleOverlay();
             }
         });
-        
+
         setLoading(false);
     }
 
@@ -102,49 +103,13 @@ function Login() {
                     <Text style={styles.textLink}>Esqueci minha senha</Text>
                 </TouchableOpacity>
             </View>
-            {/*
-            <View style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                padding: 10,
-                marginHorizontal: -10,
-                marginTop: 15,
-                marginBottom: -15,
-                flex: 1,
-                backgroundColor: '#8ef9fb38',
-            }}>
-                <RectButton
-                    style={[
-                        styles.button,
-                        {
-                            width: '45%',
-                            margin: 5,
-                            backgroundColor: '#9871F5',
-                        }
-                    ]}
-                    onPress={() => navigate('Inicial', { usuarioLogado: { id: 1, nome: '', perfil: 'CLIENTE' } })}
-                >
-                    <Text style={styles.buttonText}>Cliente</Text>
-                </RectButton>
 
-                <RectButton
-                    style={[
-                        styles.button,
-                        {
-                            width: '45%',
-                            margin: 5,
-                            backgroundColor: '#04D361',
-                        }
-                    ]}
-                    onPress={() => navigate('Inicial', { usuarioLogado: { id: 2, nome: '', perfil: 'PRESTADOR_SERVICOS' } })}
-                >
-                    <Text style={styles.buttonText}>Prestador</Text>
-                </RectButton>
+            <View style={styles.versaoContainer}>
+                <Text style={styles.versaoTexto}>Fretex v1.0</Text>
             </View>
-*/}
-
-            <Loader loading={loading} />
             
+            <Loader loading={loading} />
+
             <Overlay overlayStyle={{ width: "90%" }} isVisible={visible} onBackdropPress={toggleOverlay}>
                 <Text style={{ lineHeight: 20 }}>
 

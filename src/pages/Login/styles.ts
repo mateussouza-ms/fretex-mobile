@@ -107,6 +107,17 @@ const styles = StyleSheet.create({
         marginRight: 10,
         fontFamily: 'Poppins_600SemiBold'
     },
+
+    versaoContainer: {
+        flex: 1,
+        alignItems: "center",
+        flexDirection: "column-reverse",
+    },
+
+    versaoTexto: {
+        color: '#fff',
+        fontSize: 11,
+    },
 })
 
 export default styles;
