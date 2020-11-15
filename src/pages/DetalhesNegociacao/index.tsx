@@ -217,7 +217,7 @@ function DetalhesNegociacao({ route, navigation }: any) {
                 },
                 {
                     text: "SIM",
-                    onPress: () => { handleCancelarNegociacao }
+                    onPress: () => { handleCancelarNegociacao() }
                 }
             ],
             { cancelable: true }
@@ -228,11 +228,17 @@ function DetalhesNegociacao({ route, navigation }: any) {
     async function handleCancelarNegociacao() {
         setLoading(true);
         api.delete(`cargas/${negociacao?.cargaId}/negociacoes/${negociacao?.id}`)
+            .then(() => {
+                if (negociacao){
+                var neg = negociacao;
+                neg.status = 'FINALIZADA_SEM_ACORDO';
+                setNegociacao(neg);
+                }
+            })
             .catch(error => {
                 setErroApi(JSON.stringify(error.response.data));
                 toggleOverlay();
-            });
-        setLoading(false);
+            }).finally(() => setLoading(false));
     }
 
     const toggleOverlay = () => {
