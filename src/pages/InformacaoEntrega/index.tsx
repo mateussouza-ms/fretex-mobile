@@ -60,12 +60,12 @@ function InformacaoEntrega({ route, navigation }: any) {
                         onPress: () => navigate('DetalhesCarga', { carga, usuarioLogado })
                     }
                 ]
-            )  
+            )
         }).catch(error => {
             setErroApi(JSON.stringify(error.response.data));
-            toggleOverlay();            
-        }).finally(()=> setLoading(false));
-        
+            toggleOverlay();
+        }).finally(() => setLoading(false));
+
     }
 
 
@@ -104,12 +104,14 @@ function InformacaoEntrega({ route, navigation }: any) {
                                     if (tipoDatePiker == 'date') {
                                         settipoDatePiker('time');
                                         setShowDatePickerEntrega(true);
+                                    } else {
+                                        settipoDatePiker('date');
                                     }
                                 }
 
                             }
                         }}
-                        minimumDate={new Date()}
+                        maximumDate={new Date()}
                     />
                 }
 

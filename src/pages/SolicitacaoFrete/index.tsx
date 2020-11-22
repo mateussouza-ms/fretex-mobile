@@ -281,6 +281,23 @@ function SolicitacaoFrete() {
 
 
     function buscaCep(cep: string, endereco: string) {
+
+        if (endereco == 'enderecoRetirada') {
+            setEnderecoRetiradaLogradouro('');
+            setEnderecoRetiradaBairro('');
+            setEnderecoRetiradaComplemento('');
+            setEnderecoRetiradaUf({});
+            setEnderecoRetiradaCidade({id: 0, nome:'Cidade *', uf: ''});
+        }
+
+        if (endereco == 'enderecoEntrega') {
+            setEnderecoEntregaLogradouro('');
+            setEnderecoEntregaBairro('');
+            setEnderecoEntregaComplemento('');
+            setEnderecoEntregaUf({});
+            setEnderecoEntregaCidade({id: 0, nome:'Cidade *', uf: ''});
+        }
+
         if (cep.length != 8) {
             return;
         }

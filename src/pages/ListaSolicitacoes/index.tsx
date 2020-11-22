@@ -90,9 +90,7 @@ function ListaSolicitacoes() {
         }).catch(error => {
             setErroApi(JSON.stringify(error.response.data));
             toggleOverlay();
-        });
-
-        setLoading(false);
+        }).finally(() =>setLoading(false));
     }
 
     const toggleOverlay = () => {
@@ -105,7 +103,7 @@ function ListaSolicitacoes() {
 
         setRefreshing(true);
 
-        //await handleFilterSubmit(situacaoFiltro);
+        await handleFilterSubmit(situacaoFiltro);
         console.log(JSON.stringify(usuarioLogado));
         setRefreshing(false)
     }

@@ -59,12 +59,12 @@ function InformacaoRetirada({ route, navigation }: any) {
                         text: 'OK',
                         onPress: () => navigate('DetalhesCarga', { carga, usuarioLogado })
                     }
-                ]        
-            )            
+                ]
+            )
         }).catch(error => {
             setErroApi(JSON.stringify(error.response.data));
-            toggleOverlay();            
-        }).finally(()=> setLoading(false));
+            toggleOverlay();
+        }).finally(() => setLoading(false));
     }
 
 
@@ -103,12 +103,14 @@ function InformacaoRetirada({ route, navigation }: any) {
                                     if (tipoDatePiker == 'date') {
                                         settipoDatePiker('time');
                                         setShowDatePickerRetirada(true);
+                                    } else {
+                                        settipoDatePiker('date');
                                     }
                                 }
 
                             }
                         }}
-                        minimumDate={new Date()}
+                        maximumDate={new Date()}
                     />
                 }
 

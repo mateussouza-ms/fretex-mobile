@@ -278,8 +278,8 @@ function DetalhesNegociacao({ route, navigation }: any) {
                     <Text style={[styles.label, styles.labelContent]}>
                         {' '
                             + negociacao?.veiculo.nome + ' - '
-                            + (negociacao?.veiculo.outrasCaracteristicas && negociacao?.veiculo.outrasCaracteristicas + ' (')
-                            + 'suporta até ' + negociacao?.veiculo.pesoMaximo + ' Kg)'
+                            + (negociacao?.veiculo.outrasCaracteristicas && negociacao?.veiculo.outrasCaracteristicas)
+                            + '(suporta até ' + negociacao?.veiculo.pesoMaximo + ' Kg)'
                         }
                     </Text>
                 </Text>
