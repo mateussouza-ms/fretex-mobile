@@ -7,10 +7,9 @@ import {
 
 import styles from './styles';
 
-const Loader = props => {
+const Loader = (props: { loading: boolean; }) => {
   const {
-    loading,
-    ...attributes
+    loading
   } = props;
 
   return (
@@ -29,7 +28,5 @@ const Loader = props => {
     </Modal>
   )
 }
-
-
 
 export default Loader;
