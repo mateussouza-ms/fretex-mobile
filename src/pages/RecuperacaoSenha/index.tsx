@@ -50,12 +50,7 @@ function RecuperacaoSenha() {
 
         api.post(
             'usuarios/recuperacao-senha',
-            {},
-            {
-                params: {
-                    email,
-                }
-            }
+            {email}
         ).then(response => {
             console.log('navigate(RedefinicaoSenha);')
             setLoading(false);

@@ -51,15 +51,10 @@ function RedefinicaoSenha() {
         setLoading(true);
         api.post(
             'usuarios/redefinicao-senha',
-            {},
-            {
-                params: {
-                    codigoRecuperacao,
-                    novaSenha: senha,
-                }
-            }
-
-
+            { 
+                codigoRecuperacao,
+                novaSenha: senha,
+            }                
         ).then(response => {
             setLoading(false);
             Alert.alert(
@@ -122,6 +117,7 @@ function RedefinicaoSenha() {
                 value={senha}
                 onChangeText={(senha) => setSenha(senha)}
                 placeholder="Nova senha a ser cadastrada"
+                secureTextEntry={true}
                 maxLength={120}
             />
 
