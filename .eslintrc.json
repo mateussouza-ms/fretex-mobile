@@ -1,0 +1,32 @@
+{
+  "env": {
+    "es2021": true
+  },
+  "extends": [
+    "airbnb-typescript",
+    "prettier",
+    "prettier/react",
+    "prettier/@typescript-eslint"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 12,
+    "sourceType": "module",
+    "project": "./tsconfig.json"
+  },
+  "plugins": ["react", "@typescript-eslint", "prettier"],
+  "rules": {
+    "react/jsx-indent": [1, 2],
+    "react/jsx-indent-props": [1, 2],
+    "react/jsx-filename-extension": [
+      "error",
+      {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    ],
+    "prettier/prettier": "error"
+  }
+}
