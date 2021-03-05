@@ -1,149 +1,146 @@
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-    },
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
 
-    title: {
-        textAlign: 'center',
-        marginTop: 200,
-        fontSize: 40,
-        color: '#FA9435'
-    },
+  title: {
+    textAlign: "center",
+    marginTop: 200,
+    fontSize: 40,
+    color: "#FA9435",
+  },
 
-    inputGroup: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-    },
+  inputGroup: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
 
-    input: {
-        backgroundColor: '#e6e6fa',
-        borderRadius: 10,
-        margin: 10,
-        padding: 10,
-        color: '#000',
-        fontSize: 20
-    },
+  input: {
+    backgroundColor: "#e6e6fa",
+    borderRadius: 10,
+    margin: 10,
+    padding: 10,
+    color: "#000",
+    fontSize: 20,
+  },
 
-    inputDdd: {
-        width: '30%',
-    },
+  inputDdd: {
+    width: "30%",
+  },
 
-    inputNumero: {
-        width: '70%',
-    },
+  inputNumero: {
+    width: "70%",
+  },
 
-    button: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        margin: 15,
-        backgroundColor: '#005ca3',
-        padding: 10,
-        borderRadius: 20,
+  button: {
+    justifyContent: "center",
+    alignItems: "center",
+    margin: 15,
+    backgroundColor: "#005ca3",
+    padding: 10,
+    borderRadius: 20,
+  },
 
-    },
+  disabled: {
+    opacity: 0.6,
+  },
 
-    disabled: {
-        opacity: 0.6,
-    },
+  buttonText: {
+    fontSize: 20,
+    color: "#fff",
+    fontFamily: "Archivo_700Bold",
+  },
 
+  label: {
+    marginLeft: 10,
+    marginTop: 15,
+    fontSize: 15,
+    color: "#000",
+    fontFamily: "Poppins_400Regular",
+  },
 
-    buttonText: {
-        fontSize: 20,
-        color: '#fff',
-        fontFamily: "Archivo_700Bold",
-    },
+  labelEnderecoContainer: {
+    flexDirection: "row",
+    height: 25,
+    alignItems: "center",
+  },
 
-    label: {
-        marginLeft: 10,
-        marginTop: 15,
-        fontSize: 15,
-        color: '#000',
-        fontFamily: 'Poppins_400Regular',
-    },
+  labelEndereco: {
+    marginLeft: 0,
+    marginTop: 0,
+    width: "90%",
+  },
 
-    labelEnderecoContainer: {
-        flexDirection: "row",
-        height: 25,
-        alignItems: "center",
-    },
+  scrollCampos: {
+    paddingTop: 10,
+  },
 
-    labelEndereco: {
-        marginLeft: 0,
-        marginTop: 0,
-        width: '90%'
-    },
+  submitButton: {
+    backgroundColor: "#04d361",
+    height: 56,
+    borderRadius: 8,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
 
-    scrollCampos: {
-        paddingTop: 10,
-    },
+  submitButtonText: {
+    color: "#fff",
+    fontFamily: "Archivo_700Bold",
+    fontSize: 16,
+  },
 
-    submitButton: {
-        backgroundColor: '#04d361',
-        height: 56,
-        borderRadius: 8,
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center",
-    },
+  textoValidacao: {
+    color: "red",
+    fontSize: 13,
+  },
 
-    submitButtonText: {
-        color: '#fff',
-        fontFamily: "Archivo_700Bold",
-        fontSize: 16,
-    },
+  inputError: {
+    borderColor: "red",
+    borderWidth: 1,
+  },
 
-    textoValidacao: {
-        color: 'red',
-        fontSize: 13,
-    },
+  setaCollapse: {
+    height: 20,
+  },
 
-    inputError: {
-        borderColor: 'red',
-        borderWidth: 1,
-    },
+  selectGroup: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    margin: 10,
+  },
 
-    setaCollapse: {
-        height: 20,
-    },
+  selectContainer: {
+    width: "48%",
+    backgroundColor: "#e6e6fa",
+    borderRadius: 10,
+    paddingLeft: 5,
+    color: "#000",
+    fontSize: 20,
+  },
 
-    selectGroup: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        margin: 10,
-    },
+  enderecoContainer: {
+    backgroundColor: "#e3e0f563",
+    margin: 10,
+    padding: 10,
+    borderRadius: 10,
+    marginBottom: 20,
+  },
 
-    selectContainer: {
-        width: '48%',
-        backgroundColor: '#e6e6fa',
-        borderRadius: 10,
-        paddingLeft: 5,
-        color: '#000',
-        fontSize: 20
-    },
+  checkboxContainer: {
+    backgroundColor: "transparent",
+    borderColor: "transparent",
+    marginTop: -5,
+    marginLeft: 2,
+  },
 
-    enderecoContainer: {
-        backgroundColor: '#e3e0f563',
-        margin: 10,
-        padding: 10,
-        borderRadius: 10,
-        marginBottom: 20,
-    },
-
-    checkboxContainer: {
-        backgroundColor: 'transparent',
-        borderColor: 'transparent',
-        marginTop: -5,
-        marginLeft: 2,
-    },
-
-    checkboxText: {
-        fontFamily: 'Poppins_400Regular',
-        fontWeight: 'normal',
-    },
-
-})
+  checkboxText: {
+    fontFamily: "Poppins_400Regular",
+    fontWeight: "normal",
+  },
+});
 
 export default styles;

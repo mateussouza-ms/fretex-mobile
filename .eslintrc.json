@@ -28,6 +28,19 @@
         "extensions": [".js", ".jsx", ".ts", ".tsx"]
       }
     ],
-    "prettier/prettier": "error"
+    "prettier/prettier": "error",
+    "@typescript-eslint/naming-convention": [
+      "error",
+      {
+        "selector": "default",
+        "format": ["camelCase", "snake_case", "UPPER_CASE", "PascalCase"]
+      }
+    ],
+    "react/style-prop-object": [
+      "error",
+      {
+        "allow": ["StatusBar"]
+      }
+    ]
   }
 }

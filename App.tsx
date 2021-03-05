@@ -1,16 +1,22 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { AppLoading } from 'expo';
-import { Archivo_400Regular, Archivo_700Bold, useFonts } from '@expo-google-fonts/archivo';
-import { Poppins_400Regular, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
-import AppStack from './src/routes/AppStack';
-import { NavigationContainer } from '@react-navigation/native';
-import { AuthProvider } from './src/contexts/auth';
-import Routes from './src/routes';
+/* eslint-disable @typescript-eslint/naming-convention */
+import { StatusBar } from "expo-status-bar";
+import React from "react";
+import { AppLoading } from "expo";
+import {
+  Archivo_400Regular,
+  Archivo_700Bold,
+  useFonts,
+} from "@expo-google-fonts/archivo";
+import {
+  Poppins_400Regular,
+  Poppins_600SemiBold,
+} from "@expo-google-fonts/poppins";
+import { NavigationContainer } from "@react-navigation/native";
+import { AuthProvider } from "./src/contexts/auth";
+import Routes from "./src/routes";
 
 export default function App() {
-  let [fontsLoaded] = useFonts({
+  const [fontsLoaded] = useFonts({
     Archivo_400Regular,
     Archivo_700Bold,
     Poppins_400Regular,
@@ -18,18 +24,16 @@ export default function App() {
   });
 
   if (!fontsLoaded) {
-    return <AppLoading />
-  } else {
-    return (
-      <>
-        <NavigationContainer>
-          <AuthProvider>
-            <Routes />
-          </AuthProvider>
-        </NavigationContainer>
-        <StatusBar style="light" />
-      </>
-    );
+    return <AppLoading />;
   }
+  return (
+    <>
+      <NavigationContainer>
+        <AuthProvider>
+          <Routes />
+        </AuthProvider>
+      </NavigationContainer>
+      <StatusBar style="light" />
+    </>
+  );
 }
-
