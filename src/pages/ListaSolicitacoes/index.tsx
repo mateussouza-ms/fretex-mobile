@@ -81,7 +81,7 @@ function ListaSolicitacoes() {
         params: {
           situacao,
           usuarioId: usuarioLogado?.id,
-          usuarioPerfil: usuarioLogado?.perfilSelecionado,
+          usuarioPerfil: usuarioLogado?.perfilSelecionado?.perfil,
         },
       })
       .then((response) => {
@@ -109,7 +109,7 @@ function ListaSolicitacoes() {
     <View style={styles.container}>
       <PageHeader
         title={
-          usuarioLogado?.perfilSelecionado === "CLIENTE"
+          usuarioLogado?.perfilSelecionado?.perfil === "CLIENTE"
             ? "Lista de solicitações"
             : "Lista de cargas"
         }

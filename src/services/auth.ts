@@ -1,5 +1,5 @@
 import { encode as btoa } from "base-64";
-import { UsuarioLogado } from "../types/UsuarioLogado";
+import { UsuarioLogado, Perfil } from "../types/UsuarioLogado";
 import api from "./api";
 
 interface Response {
@@ -57,10 +57,10 @@ export async function signIn(credenciais: Credenciais): Promise<Response> {
     authorities,
   } = responseUserAuth.data;
 
-  let perfisUsuario: string[] = [];
+  let perfisUsuario: Perfil[] = [];
 
-  authorities.forEach((authoritie: { authority: string }) => {
-    perfisUsuario = [...perfisUsuario, authoritie.authority];
+  authorities.forEach((authoritie: Perfil) => {
+    perfisUsuario = [...perfisUsuario, authoritie];
   });
 
   const response: Response = {
@@ -70,7 +70,6 @@ export async function signIn(credenciais: Credenciais): Promise<Response> {
       nome: usuarioNome,
       email: usuarioEmail,
       perfis: perfisUsuario,
-      perfilSelecionado: null,
     },
   };
 

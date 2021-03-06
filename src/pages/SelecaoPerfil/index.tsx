@@ -70,8 +70,8 @@ function SelecaoPerfil() {
   async function cadastrarCliente() {
     await api
       .post(`usuarios/${usuarioLogado?.id}/perfil/cliente`)
-      .then(() => {
-        adicionarPerfil("CLIENTE");
+      .then((response) => {
+        adicionarPerfil({ id: response.data.id, perfil: "CLIENTE" });
         navigate("Inicial");
       })
       .catch((error) => {
@@ -81,20 +81,32 @@ function SelecaoPerfil() {
   }
 
   function handlePerfilCliente() {
-    if (usuarioLogado?.perfis.indexOf("CLIENTE") === -1) {
-      cadastrarCliente();
-    } else {
-      alterarPerfil("CLIENTE");
+    let perfilCliente;
+    usuarioLogado?.perfis.forEach((perfil) => {
+      if (perfil.perfil === "CLIENTE") {
+        perfilCliente = perfil;
+      }
+    });
+    if (perfilCliente) {
+      alterarPerfil(perfilCliente);
       navigate("Inicial");
+    } else {
+      cadastrarCliente();
     }
   }
 
   function handlePerfilPrestador() {
-    if (usuarioLogado?.perfis.indexOf("PRESTADOR_SERVICOS") === -1) {
-      navigate("CadastroVeiculo");
-    } else {
-      alterarPerfil("PRESTADOR_SERVICOS");
+    let perfilPrestador;
+    usuarioLogado?.perfis.forEach((perfil) => {
+      if (perfil.perfil === "PRESTADOR_SERVICOS") {
+        perfilPrestador = perfil;
+      }
+    });
+    if (perfilPrestador) {
+      alterarPerfil(perfilPrestador);
       navigate("Inicial");
+    } else {
+      navigate("CadastroVeiculo");
     }
   }
 
@@ -120,7 +132,7 @@ function SelecaoPerfil() {
           <View
             style={[
               styles.buttonContainer,
-              usuarioLogado?.perfilSelecionado === "CLIENTE"
+              usuarioLogado?.perfilSelecionado?.perfil === "CLIENTE"
                 ? styles.selecionado
                 : null,
             ]}
@@ -137,7 +149,7 @@ function SelecaoPerfil() {
           <View
             style={[
               styles.buttonContainer,
-              usuarioLogado?.perfilSelecionado === "PRESTADOR_SERVICOS"
+              usuarioLogado?.perfilSelecionado?.perfil === "PRESTADOR_SERVICOS"
                 ? styles.selecionado
                 : null,
             ]}

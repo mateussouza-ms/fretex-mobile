@@ -149,7 +149,7 @@ function DetalhesNegociacao({ route }: any) {
 
   async function aceitarProposta(proposta: any) {
     setLoading(true);
-    if (usuarioLogado?.perfilSelecionado === "PRESTADOR_SERVICOS") {
+    if (usuarioLogado?.perfilSelecionado?.perfil === "PRESTADOR_SERVICOS") {
       await api
         .post(
           `cargas/${negociacao?.cargaId}/negociacoes/${negociacao?.id}/propostas`,
@@ -407,7 +407,7 @@ function DetalhesNegociacao({ route }: any) {
             <Text style={styles.buttonText}>Cancelar negociação</Text>
           </RectButton>
 
-          {usuarioLogado?.perfilSelecionado === "PRESTADOR_SERVICOS" &&
+          {usuarioLogado?.perfilSelecionado?.perfil === "PRESTADOR_SERVICOS" &&
             negociacao?.status === "FINALIZADA_COM_ACORDO" &&
             !carga.dataRetirada && (
               <RectButton
@@ -419,7 +419,7 @@ function DetalhesNegociacao({ route }: any) {
               </RectButton>
             )}
 
-          {usuarioLogado?.perfilSelecionado === "PRESTADOR_SERVICOS" &&
+          {usuarioLogado?.perfilSelecionado?.perfil === "PRESTADOR_SERVICOS" &&
             negociacao?.status === "FINALIZADA_COM_ACORDO" &&
             !!carga.dataRetirada &&
             !carga.dataEntrega && (

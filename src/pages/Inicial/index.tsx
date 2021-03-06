@@ -22,7 +22,7 @@ const Inicial: React.FC = () => {
 
       <View style={styles.body}>
         <View style={styles.buttonsContainer}>
-          {usuarioLogado?.perfilSelecionado === "CLIENTE" && (
+          {usuarioLogado?.perfilSelecionado?.perfil === "CLIENTE" && (
             <RectButton
               onPress={() => {
                 navigate("SolicitacaoFrete");
@@ -42,7 +42,7 @@ const Inicial: React.FC = () => {
           >
             <Image source={iconeListaNegociacoes} />
 
-            {usuarioLogado?.perfilSelecionado === "CLIENTE" ? (
+            {usuarioLogado?.perfilSelecionado?.perfil === "CLIENTE" ? (
               <Text style={styles.buttonText}>
                 Listar solicitações de cargas
               </Text>

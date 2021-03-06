@@ -83,7 +83,8 @@ const PageHeader: React.FC<PageHeaderProps> = ({ title }: PageHeaderProps) => {
                 <Text style={styles.modalButtonText}>Alterar senha</Text>
               </TouchableHighlight>
 
-              {usuarioLogado?.perfilSelecionado === "PRESTADOR_SERVICOS" && (
+              {usuarioLogado?.perfilSelecionado?.perfil ===
+                "PRESTADOR_SERVICOS" && (
                 <TouchableHighlight
                   style={styles.modalButton}
                   onPress={() => {
@@ -123,10 +124,10 @@ const PageHeader: React.FC<PageHeaderProps> = ({ title }: PageHeaderProps) => {
           <Avatar
             containerStyle={[
               styles.avatar,
-              usuarioLogado?.perfilSelecionado === "CLIENTE" &&
+              usuarioLogado?.perfilSelecionado?.perfil === "CLIENTE" &&
                 styles.avatarCliente,
-              usuarioLogado?.perfilSelecionado === "PRESTADOR_SERVICOS" &&
-                styles.avatarPrestador,
+              usuarioLogado?.perfilSelecionado?.perfil ===
+                "PRESTADOR_SERVICOS" && styles.avatarPrestador,
             ]}
             // avatarStyle= {{borderWidth: 5, borderColor: '#9871F5'}}
 

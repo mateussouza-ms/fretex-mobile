@@ -2,6 +2,11 @@ export interface UsuarioLogado {
   id: number;
   nome: string;
   email?: string;
-  perfis: string[];
-  perfilSelecionado: string | null;
+  perfis: Perfil[];
+  perfilSelecionado?: Perfil;
+}
+
+export interface Perfil {
+  id: number;
+  perfil: string;
 }

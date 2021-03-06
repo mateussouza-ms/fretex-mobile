@@ -50,9 +50,11 @@ const CadastroVeiculo: React.FC = () => {
     !errors.tipoVeiculo && !errors.nome && !errors.placa && !errors.pesoMaximo;
 
   useEffect(() => {
-    if (usuarioLogado?.perfis.indexOf("PRESTADOR_SERVICOS") === -1) {
-      setNovoPrestador(true);
-    }
+    usuarioLogado?.perfis.forEach((perfil) => {
+      if (perfil.perfil === "PRESTADOR_SERVICOS") {
+        setNovoPrestador(true);
+      }
+    });
   });
 
   const toggleOverlay = () => {
@@ -70,8 +72,8 @@ const CadastroVeiculo: React.FC = () => {
           outrasCaracteristicas,
         },
       })
-      .then(() => {
-        adicionarPerfil("PRESTADOR_SERVICOS");
+      .then((response) => {
+        adicionarPerfil({ id: response.data.id, perfil: "PRESTADOR_SERVICOS" });
         setTipoVeiculo("");
         setNome("");
         setPlaca("");

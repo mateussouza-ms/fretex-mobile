@@ -20,6 +20,7 @@ import apiCorreios from "../../services/apiCorreios";
 
 import styles from "./styles";
 import Loader from "../../components/Loader";
+import { useAuth } from "../../contexts/auth";
 
 interface UF {
   sigla: string;
@@ -117,6 +118,8 @@ function SolicitacaoFrete() {
   const [cidadesEnderecoEntrega, setCidadesEnderecoEntrega] = useState<
     Cidade[]
   >([]);
+
+  const { usuarioLogado } = useAuth();
 
   const errors = {
     tipoCarga: obrigatorio(tipoCarga) || max(tipoCarga, 120),
@@ -288,7 +291,7 @@ function SolicitacaoFrete() {
     await api
       .post("cargas", {
         cliente: {
-          id: 1,
+          id: usuarioLogado?.perfilSelecionado?.id,
         },
         tipoCarga,
         peso,

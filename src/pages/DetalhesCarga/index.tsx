@@ -104,7 +104,7 @@ function DetalhesCarga({ route }: any) {
     setCarga(route.params.carga);
 
     if (
-      usuarioLogado?.perfilSelecionado === "PRESTADOR_SERVICOS" &&
+      usuarioLogado?.perfilSelecionado?.perfil === "PRESTADOR_SERVICOS" &&
       veiculos.length === 0
     ) {
       api
@@ -337,7 +337,7 @@ function DetalhesCarga({ route }: any) {
           </Text>
         )}
 
-        {usuarioLogado?.perfilSelecionado === "PRESTADOR_SERVICOS" &&
+        {usuarioLogado?.perfilSelecionado?.perfil === "PRESTADOR_SERVICOS" &&
           carga.negociacoes.length === 0 &&
           veiculos.length > 1 && (
             <View style={styles.filterGroup}>
@@ -363,7 +363,7 @@ function DetalhesCarga({ route }: any) {
             </View>
           )}
 
-        {usuarioLogado?.perfilSelecionado === "PRESTADOR_SERVICOS" &&
+        {usuarioLogado?.perfilSelecionado?.perfil === "PRESTADOR_SERVICOS" &&
           carga.negociacoes.length === 0 && (
             <TouchableOpacity
               style={styles.link}

@@ -8,7 +8,7 @@ import React, {
 import AsyncStorage from "@react-native-community/async-storage";
 import * as auth from "../services/auth";
 import api from "../services/api";
-import { UsuarioLogado } from "../types/UsuarioLogado";
+import { UsuarioLogado, Perfil } from "../types/UsuarioLogado";
 
 interface AuthContextData {
   signed: boolean;
@@ -16,8 +16,8 @@ interface AuthContextData {
   loading: boolean;
   signIn(credenciais: auth.Credenciais, lembrar: boolean): Promise<void>;
   signOut(): void;
-  alterarPerfil(perfil: string): void;
-  adicionarPerfil(perfil: string): void;
+  alterarPerfil(perfil: Perfil): void;
+  adicionarPerfil(perfil: Perfil): void;
   setUsuarioLogado(usuarioLogado: UsuarioLogado): void;
 }
 
@@ -56,7 +56,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({
     api.defaults.headers.Authorization = null;
   }
 
-  async function alterarPerfil(perfil: string) {
+  async function alterarPerfil(perfil: Perfil) {
     if (usuarioLogado) {
       const usuario = {
         id: usuarioLogado.id,
@@ -73,7 +73,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({
     }
   }
 
-  async function adicionarPerfil(perfil: string) {
+  async function adicionarPerfil(perfil: Perfil) {
     if (usuarioLogado) {
       const usuario = {
         id: usuarioLogado.id,
