@@ -11,20 +11,9 @@ const styles = StyleSheet.create({
     margin: 10,
   },
 
-  scrollView: {
-    // padding: 5,
-  },
-
   list: {
     borderTopWidth: 1,
     borderColor: "#cbd2d9",
-  },
-
-  selectContainer: {
-    borderRadius: 10,
-    color: "#000",
-    fontSize: 25,
-    flex: 1,
   },
 
   label: {
@@ -32,7 +21,6 @@ const styles = StyleSheet.create({
     color: "#000",
     fontFamily: "Poppins_600SemiBold",
     margin: 3,
-    // backgroundColor: '#e6eff49e',
     borderRadius: 7,
     padding: 2,
     paddingLeft: 5,
@@ -46,12 +34,6 @@ const styles = StyleSheet.create({
   labelList: {
     backgroundColor: "#fff",
     marginLeft: 10,
-  },
-
-  filterGroup: {
-    flexDirection: "row",
-    alignContent: "space-between",
-    alignItems: "center",
   },
 
   listButtonsContainer: {

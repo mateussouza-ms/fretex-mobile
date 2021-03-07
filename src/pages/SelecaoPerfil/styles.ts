@@ -33,7 +33,6 @@ const styles = StyleSheet.create({
 
   buttonsContainer: {
     flexDirection: "row",
-
     justifyContent: "space-between",
   },
 
@@ -48,7 +47,6 @@ const styles = StyleSheet.create({
 
   button: {
     height: 150,
-    // width: '48%',
     borderRadius: 8,
     padding: 20,
     justifyContent: "space-between",
@@ -66,15 +64,6 @@ const styles = StyleSheet.create({
     fontFamily: "Archivo_700Bold",
     color: "#FFF",
     fontSize: 20,
-  },
-
-  totalConnections: {
-    fontFamily: "Poppins_400Regular",
-    color: "#d4c2ff",
-    fontSize: 12,
-    lineHeight: 20,
-    maxWidth: 145,
-    marginTop: 40,
   },
 
   selecionado: {

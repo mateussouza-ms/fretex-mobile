@@ -13,24 +13,6 @@ const styles = StyleSheet.create({
     padding: 20,
   },
 
-  title: {
-    fontFamily: "Poppins_400Regular",
-    color: "#005ca3",
-    fontSize: 20,
-    lineHeight: 35,
-    marginTop: -50,
-  },
-
-  titleBold: {
-    fontFamily: "Poppins_600SemiBold",
-    lineHeight: 70,
-  },
-
-  subtitle: {
-    fontSize: 15,
-    lineHeight: 25,
-  },
-
   buttonsContainer: {
     flexDirection: "column",
     justifyContent: "center",
@@ -56,15 +38,6 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     maxWidth: "95%",
     width: "90%",
-  },
-
-  totalConnections: {
-    fontFamily: "Poppins_400Regular",
-    color: "#d4c2ff",
-    fontSize: 12,
-    lineHeight: 20,
-    maxWidth: 145,
-    marginTop: 40,
   },
 });
 

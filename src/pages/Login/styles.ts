@@ -14,25 +14,12 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
 
-  textLogo: {
-    fontFamily: "Poppins_600SemiBold",
-    textAlign: "center",
-    fontSize: 60,
-    color: "#FA9435",
-    marginBottom: 40,
-  },
-
   title: {
     fontFamily: "Archivo_700Bold",
     color: "#fff",
     marginLeft: 10,
     marginBottom: 5,
     fontSize: 25,
-  },
-
-  inputGroup: {
-    flexDirection: "row",
-    justifyContent: "space-between",
   },
 
   input: {
@@ -42,14 +29,6 @@ const styles = StyleSheet.create({
     padding: 10,
     color: "#000",
     fontSize: 20,
-  },
-
-  inputDdd: {
-    width: "30%",
-  },
-
-  inputNumero: {
-    width: "70%",
   },
 
   button: {
@@ -67,15 +46,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: "#fff",
     fontFamily: "Archivo_700Bold",
-  },
-
-  label: {
-    marginLeft: 10,
-    fontSize: 15,
-  },
-
-  scrollCampos: {
-    paddingTop: 50,
   },
 
   linksContainer: {

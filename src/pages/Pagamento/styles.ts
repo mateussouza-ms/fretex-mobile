@@ -10,15 +10,6 @@ const styles = StyleSheet.create({
     padding: 5,
   },
 
-  scrollView: {
-    // padding: 5,
-  },
-
-  list: {
-    borderTopWidth: 1,
-    borderColor: "#cbd2d9",
-  },
-
   selectContainer: {
     borderRadius: 10,
     color: "#000",
@@ -43,43 +34,6 @@ const styles = StyleSheet.create({
     fontWeight: "normal",
   },
 
-  labelList: {
-    backgroundColor: "#fff",
-    marginLeft: 10,
-  },
-
-  filterGroup: {
-    flexDirection: "row",
-    alignContent: "space-between",
-    alignItems: "center",
-  },
-
-  listButtonsContainer: {
-    flexDirection: "row",
-    marginTop: 15,
-    borderWidth: 0,
-  },
-
-  buttonList: {
-    borderWidth: 0,
-    backgroundColor: "#edededcf",
-  },
-
-  buttonListText: {
-    color: "#005ca3",
-    fontWeight: "bold",
-    fontSize: 16,
-  },
-
-  listItem: {
-    backgroundColor: "#edededcf",
-    margin: 7,
-    borderRadius: 15,
-    borderWidth: 2,
-    borderBottomWidth: 2,
-    padding: 10,
-  },
-
   button: {
     justifyContent: "center",
     alignItems: "center",
@@ -97,16 +51,6 @@ const styles = StyleSheet.create({
 
   titleContainer: {
     padding: 5,
-  },
-
-  title: {
-    fontFamily: "Poppins_600SemiBold",
-    color: "#005ca3",
-    fontSize: 20,
-    lineHeight: 45,
-    padding: 5,
-    paddingTop: 10,
-    textAlign: "center",
   },
 
   subtitle: {

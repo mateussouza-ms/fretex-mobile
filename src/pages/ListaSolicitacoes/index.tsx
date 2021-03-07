@@ -142,7 +142,6 @@ function ListaSolicitacoes() {
       </View>
 
       <ScrollView
-        style={styles.scrollView}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }

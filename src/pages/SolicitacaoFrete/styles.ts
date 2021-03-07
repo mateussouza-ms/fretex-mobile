@@ -6,18 +6,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
 
-  title: {
-    textAlign: "center",
-    marginTop: 200,
-    fontSize: 40,
-    color: "#FA9435",
-  },
-
-  inputGroup: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-
   input: {
     backgroundColor: "#e6e6fa",
     borderRadius: 10,
@@ -25,14 +13,6 @@ const styles = StyleSheet.create({
     padding: 10,
     color: "#000",
     fontSize: 20,
-  },
-
-  inputDdd: {
-    width: "30%",
-  },
-
-  inputNumero: {
-    width: "70%",
   },
 
   button: {
@@ -76,21 +56,6 @@ const styles = StyleSheet.create({
 
   scrollCampos: {
     paddingTop: 10,
-  },
-
-  submitButton: {
-    backgroundColor: "#04d361",
-    height: 56,
-    borderRadius: 8,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  submitButtonText: {
-    color: "#fff",
-    fontFamily: "Archivo_700Bold",
-    fontSize: 16,
   },
 
   textoValidacao: {

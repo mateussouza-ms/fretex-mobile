@@ -157,7 +157,6 @@ function DetalhesCarga({ route }: any) {
   return (
     <View style={styles.container}>
       <ScrollView
-        style={styles.scrollView}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }

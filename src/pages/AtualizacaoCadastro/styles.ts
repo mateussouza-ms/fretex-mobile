@@ -60,21 +60,6 @@ const styles = StyleSheet.create({
     paddingTop: 30,
   },
 
-  submitButton: {
-    backgroundColor: "#04d361",
-    height: 56,
-    borderRadius: 8,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  submitButtonText: {
-    color: "#fff",
-    fontFamily: "Archivo_700Bold",
-    fontSize: 16,
-  },
-
   textoValidacao: {
     color: "red",
     fontSize: 13,

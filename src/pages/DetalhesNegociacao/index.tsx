@@ -316,7 +316,6 @@ function DetalhesNegociacao({ route }: any) {
 
       <Text style={[styles.label, styles.labelList]}>Propostas: </Text>
       <ScrollView
-        style={styles.scrollView}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }

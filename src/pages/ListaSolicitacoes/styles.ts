@@ -6,10 +6,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
 
-  scrollView: {
-    // padding: 5,
-  },
-
   list: {
     borderTopWidth: 1,
     borderColor: "#cbd2d9",
