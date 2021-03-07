@@ -12,3 +12,7 @@ O software tem o objetivo de atender necessidades existentes nas atividades de t
 ![typescript](https://img.shields.io/badge/typescript-4.0.3-green)
 ![ReactNative](https://img.shields.io/badge/React_Native-0.63.2-green)
 ![Expo](https://img.shields.io/badge/Expo-39.0.2-green)
+<br/> <br/> 
+## :pager: Design da aplicação
+A imagem abaixo ilustra algumas das telas da aplicação.<br/>
+![Design](https://user-images.githubusercontent.com/63478857/110226639-c0a06800-7ecf-11eb-9429-c0af90bad419.png)
